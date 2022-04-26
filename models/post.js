@@ -27,7 +27,11 @@ var PostSchema = new Schema({
                 required: true,
           },
     
-    published: {type: Boolean, default: false, required: true},
+    published: {
+                type: Boolean, 
+                default: false, 
+                required: true
+               },
 })
 
 PostSchema

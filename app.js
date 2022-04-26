@@ -6,12 +6,14 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
 var passport = require('passport');
-// var LocalStrategy = require('passport-local').Strategy();
+var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+var bcrypt = require('bcryptjs');
+var User = require('./models/user');
 
-var indexRouter = require('./routes/index');
+var postsRouter = require('./routes/posts');
 var usersRouter = require('./routes/users');
+var commentsRouter = require('./routes/comments');
 
 var app = express();
 
@@ -31,13 +33,54 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//set up localstrategy
+passport.use(
+  new LocalStrategy((username, password, done) => {
+    User.findOne({ username: username }, (err, user) => {
+      if (err) { 
+        return done(err);
+      }
+      if (!user) {
+        return done(null, false, { message: "Incorrect username" });
+      }
+      
+      bcrypt.compare(password, user.password, (err,res) => {
+        if(res) {
+          return done(null ,user);
+        }
+        else {
+          return done(null, false, { message: "Incorrect Password"})
+        }
+      })
+    });
+  })
+);
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+})
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  })
+})
+
 
 app.use(session({secret: 'cats', resave: false, saveUninitialized: false}));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api/posts', postsRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/posts/:post_id/comments', commentsRouter);
+app.use('/api/users/:user_id/comments', commentsRouter);
+
+//local user
+app.use(function(req, res, next) {
+  res.locals.currentUser = req.user;
+  next();
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
