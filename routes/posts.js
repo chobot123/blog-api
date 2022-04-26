@@ -2,26 +2,30 @@ var express = require('express');
 var router = express.Router();
 
 var post_controller = require('../controllers/postController');
+var commentsRouter = require('./routes/comments');
 
 //GET -- ALL POSTS  //
-router.get('/posts', post_controller.posts);
+router.get('/', post_controller.posts);
 
 //GET -- SINGLE POST
-router.get('/posts/:id', post_controller.post_get);
+router.get('/:id', post_controller.post_get);
 
 //POST -- CREATE POST
-router.post('/posts', post_controller.post_create);
+router.post('/', post_controller.post_create);
 
 //POST -- PUBLISH POST
-router.post('/posts/:id/publish', post_controller.post_publish);
+router.post('/:id/publish', post_controller.post_publish);
 
 //POST -- UNPUBLISH POST
-router.post('/posts/:id/unpublish', post_controller.post_unpublish);
+router.post('/:id/unpublish', post_controller.post_unpublish);
 
 //PUT -- UPDATE POST
-router.put('/posts/:id/edit', post_controller.post_update);
+router.put('/:id/edit', post_controller.post_update);
 
 //DELETE -- DELETE POST
-router.delete('/posts/:id', post_controller.post_delete);
+router.delete('/:id', post_controller.post_delete);
+
+// ----- COMMENTS ----- //
+router.use('/:post_id/comments', commentsRouter);
 
 module.exports = router;

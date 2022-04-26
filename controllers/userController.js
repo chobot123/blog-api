@@ -16,26 +16,25 @@ exports.signup_post = [
         return true;
     }),
 
-    (req, res, next) => {
+    (req, res) => {
 
         const errors = validationResult(req);
 
         //if there are errors, resend a json with the sanitized values
         if(!errors.isEmpty()){
-            res.json({
+            return res.json({
                 errors: errors.array(),
                 username: req.body.username,
-            })
-            return;
+            });
         }
         else {
             //if username is taken return error msg
             User.find({"username": req.body.username})
             .exec(function(err, results) {
-                if(err) {return next(err);}
+                if(err) {return res.json(err);}
                 if(results.length > 0) {
                     let newErr = new Error('Username Already Exists');
-                    return res.status(409).json({error: newErr})
+                    return res.status(409).json({error: newErr});
                 }
             })
 
@@ -66,11 +65,11 @@ exports.login_post = passport.authenticate('local', {
 })
 
 //get single user
-exports.user_get = function(req, res, next) {
+exports.user_get = function(req, res) {
 
     User.findById(req.params.id)
     .exec(function(err, thisUser) {
-        if(err) {return next(err);}
+        if(err) {return res.json(err);}
         return res.json(thisUser);
     })
 }

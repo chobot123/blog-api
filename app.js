@@ -13,7 +13,7 @@ var User = require('./models/user');
 
 var postsRouter = require('./routes/posts');
 var usersRouter = require('./routes/users');
-var commentsRouter = require('./routes/comments');
+// var commentsRouter = require('./routes/comments');
 
 var app = express();
 
@@ -73,8 +73,7 @@ app.use(passport.session());
 
 app.use('/api/posts', postsRouter);
 app.use('/api/users', usersRouter);
-app.use('/api/posts/:post_id/comments', commentsRouter);
-app.use('/api/users/:user_id/comments', commentsRouter);
+// app.use('/api/posts/:post_id/comments', commentsRouter);
 
 //local user
 app.use(function(req, res, next) {
