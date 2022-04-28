@@ -1,5 +1,7 @@
+require('dotenv').config();
 var Post = require('../models/post');
 const { body, validationResult } = require('express-validator');
+var jwt = require('jsonwebtoken');
 
 
 //get all posts, sorted (recent => latest)
@@ -23,9 +25,9 @@ exports.post_get = function(req, res) {
     })
 }
 
-//create post
+//create post -- TESTED
 exports.post_create = [
-    
+
     body("title").trim().isLength({min: 1}).withMessage("Please Enter a Title").escape(),
     body("text").trim().isLength({min: 1}).withMessage("Please Enter Content").escape(),
     
@@ -38,14 +40,14 @@ exports.post_create = [
         }
 
         else {
+
             let post = new Post({
                 title: req.body.title,
-                user: res.locals.currentUser,
+                user: req.authData.user,
                 text: req.body.text
             });
 
-            post.populate("user")
-            .save(function(err, thisPost){
+            post.save(function(err, thisPost){
                 if(err) {return res.json(err);}
                 console.log("Create Post: ", thisPost);
                 return res.json(thisPost);
@@ -54,8 +56,12 @@ exports.post_create = [
     }
 ];
 
+//publish post -- TESTED
 exports.post_publish = function(req, res) {
-    Post.findByIdAndUpdate(req.params.id, {"published": true}, function(err, results){
+
+    Post.findByIdAndUpdate(req.params.id, {"published": true})
+    .populate("user")
+    .exec(function(err, results){
         if(err){return res.json(err);}
         else {
             return res.json("Published Post: " + results);
@@ -63,8 +69,12 @@ exports.post_publish = function(req, res) {
     })
 }
 
+//unpublish post -- TESTED
 exports.post_unpublish = function(req, res) {
-    Post.findByIdAndUpdate(req.params.id, {"published": false}, function(err, results){
+
+    Post.findByIdAndUpdate(req.params.id, {"published": false})
+    .populate("user")
+    .exec(function(err, results){
         if(err) {return res.json(err);}
         else {
             return res.json("Unpublished Post: " + results);
@@ -74,6 +84,7 @@ exports.post_unpublish = function(req, res) {
 
 //update post
 exports.post_update = [
+
     body("title").trim().isLength({"min": 1}).escape(),
     body("text").trim().isLength({"min": 1}).escape(),
 
@@ -89,7 +100,7 @@ exports.post_update = [
 
             let post = new Post({
                 title: req.body.title,
-                user: res.locals.currentUser,
+                user: req.authData.user,
                 text: req.body.text, 
                 published: req.body.published,
                 _id: req.params.id,

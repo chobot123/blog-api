@@ -6,6 +6,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
 var passport = require('passport');
+var passportJWT = require('passport-jwt');
+var JWTStrategy = passportJWT.Strategy;
+var ExtractJWT = passportJWT.ExtractJwt;
 var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
@@ -56,6 +59,17 @@ passport.use(
   })
 );
 
+passport.use(new JWTStrategy({
+
+  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+  secretOrKey : process.env.JWT_SECRET_KEY,
+},
+function (jwtPayload, done) {
+  return done(null, jwtPayload);
+}
+));
+
+
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 })
@@ -75,11 +89,11 @@ app.use('/api/posts', postsRouter);
 app.use('/api/users', usersRouter);
 // app.use('/api/posts/:post_id/comments', commentsRouter);
 
-//local user
-app.use(function(req, res, next) {
-  res.locals.currentUser = req.user;
-  next();
-})
+// //local user
+// app.use(function(req, res, next) {
+//   res.locals.currentUser = req.user;
+//   next();
+// })
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
