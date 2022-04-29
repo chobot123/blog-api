@@ -12,6 +12,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
 var User = require('./models/user');
+var cors = require('cors');
 // var commentsRouter = require('./routes/comments');
 var authRouter = require('./routes/auths');
 
@@ -31,6 +32,7 @@ auth.use(express.json());
 auth.use(express.urlencoded({ extended: false }));
 auth.use(cookieParser());
 auth.use(express.static(path.join(__dirname, 'public')));
+auth.use(cors());
 
 //set up localstrategy
 passport.use(

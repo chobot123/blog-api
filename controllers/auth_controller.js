@@ -77,8 +77,12 @@ exports.login_post = function(req, res) {
 //sign up --TESTED
 exports.signup_post = [
 
-    body("username").trim().isLength({min: 6}).withMessage("Please Enter Atleast 6 Characters").escape(),
-    body("password").trim().isStrongPassword().withMessage("Please Have a Minimum Length of 8, a Lowercase Letter, an Uppercase Letter, a Number, and a Symbol(@,!, etc...)")
+    body("username").trim().isLength({min: 6}).withMessage("The Username Must Have Atleast 6 Characters").escape(),
+    body("password").trim().isStrongPassword().withMessage(`Please Have Atleast 8 Characters, 
+                                                            a Lowercase Letter, 
+                                                            an Uppercase Letter, 
+                                                            a Number, 
+                                                            and a Symbol(@,!, etc...)`)
         .escape(),
     body("confirmpassword").trim().custom((value, {req}) => {
         if(value !== req.body.password) {
@@ -93,7 +97,7 @@ exports.signup_post = [
 
         //if there are errors, resend a json with the sanitized values
         if(!errors.isEmpty()){
-            return res.json({
+            return res.status(409).json({
                 errors: errors.array(),
                 username: req.body.username,
             });

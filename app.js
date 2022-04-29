@@ -13,6 +13,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
 var User = require('./models/user');
+var cors = require('cors');
 
 var postsRouter = require('./routes/posts');
 var usersRouter = require('./routes/users');
@@ -84,6 +85,7 @@ passport.deserializeUser(function(id, done) {
 app.use(session({secret: 'cats', resave: false, saveUninitialized: false}));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(cors());
 
 app.use('/api/posts', postsRouter);
 app.use('/api/users', usersRouter);
