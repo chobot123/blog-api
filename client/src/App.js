@@ -1,19 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import Create from './components/Create';
 import Header from './components/Header';
 import Home from './components/Home';
 import Login from './components/Login';
+import Logout from './components/Logout';
 import Signup from './components/Signup';
 import "./styles/App.css"
 
 function App() {
 
-  //user -- initial state is 'no user' (undefined)
-  // const [user, setUser] = useState(undefined);
+  const [user, setUser] = useState("");
 
   return (
     <Router>
-        <Header/>
+        <Header user = {user}/>
         <Routes>
           <Route
             exact path='/'
@@ -27,9 +28,24 @@ function App() {
           </Route>
           <Route
             exact path='/login'
-            element={<Login />}
+            element={<Login setUser={setUser}/>}
           > 
           </Route>
+          <Route
+            exact path='/logout'
+            element={<Logout />}
+          > 
+          </Route>
+          <Route
+            exact path='/create'
+            element={<Create />}
+          > 
+          </Route>
+          {/* <Route
+            exact path='/login'
+            element={<Login setUser={setUser}/>}
+          > 
+          </Route> */}
         </Routes>
     </Router>
   );

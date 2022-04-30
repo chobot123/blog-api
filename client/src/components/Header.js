@@ -2,7 +2,8 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import "../styles/header.css";
 
-function Header(){
+function Header(props){
+
 
     return (
         <div className="header">
@@ -13,18 +14,24 @@ function Header(){
             Blog
             </NavLink>
             <div className="navbar">
-                <NavLink
-                    className={"login"}
-                    exact to="/login"
-                >
-                Login
-                </NavLink>
-                <NavLink
-                    className={"signup"}
-                    exact to="/signup"
-                >
-                Sign Up
-                </NavLink>
+
+                {   //if there is no user
+                    (!props.user) ? 
+                                    <div className="user-nav create">
+                                        <NavLink id="login" exact to="/login">Login</NavLink>
+                                        <NavLink id="signup" exact to="/signup">Signup</NavLink>
+                                    </div>
+
+                                    :
+
+                                    <div className="user-nav">
+                                        <NavLink id="home" exact to="/">Home</NavLink>
+                                        {/* <NavLink id="dashboard" exact to="/dashboard">Dashboard</NavLink> */}
+                                        <NavLink className="create" exact to="/create">Create</NavLink>
+                                    </div>
+
+                }
+
             </div>
         </div>
     )

@@ -17,7 +17,7 @@
     padding: 10px;
 }
 
-.navbar>*{
+.user-nav>*{
     margin: 5px;
     padding: 5px;
     text-decoration: none;
@@ -28,10 +28,6 @@
     font-size: large;
 }
 
-.navbar>*:hover {
+.user-nav>*:hover {
     transform: scale(1.2);
-}
-
-.active {
-
 }

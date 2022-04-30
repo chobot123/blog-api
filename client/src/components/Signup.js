@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Signup(props){
 
@@ -7,6 +8,7 @@ function Signup(props){
     const [password, setPassword] = useState("");
     const [confirmpassword, setConfirmPassword] = useState("");
     const [error, setError] = useState([]);
+    const navigate = useNavigate();
 
     // const headers = {
     //     headers: {
@@ -19,7 +21,7 @@ function Signup(props){
         e.preventDefault();
 
         //fetch the data to api (axios(url, body, headers))
-        axios.post('http://localhost:8000/api/auth/signup',
+        axios.post('http://localhost:4000/api/auth/signup',
                 {
                     username: username,
                     password: password,
@@ -28,30 +30,18 @@ function Signup(props){
         )
         //move the user to the login page
         .then(() => {
-                    props.history.push("/login");
-                })
+            navigate("/login");
+        })
         //catch any errors the server returns, if its an input error => render
         .catch((err) => {
             console.log(err);
             if(err.response.status === 401 || err.response.status === 409){
-                (err.response.data.errors) ? setError([...err.response.data.errors]) : setError([...err.response.data.error]);
+                (err.response.data.errors) ? setError([...err.response.data.errors]) : setError([err.response.data.error]);
+                console.log(error);
             }
             else { console.log(err);}
         })
     }
-
-    // const displayErrors = () => {
-    //     //if there are errors, render them in a list
-    //     console.log(error);
-    //     if(error.length > 0){
-    //         <ul>
-    //             {error.map(function(err, index) {
-    //                 console.log(err.msg);
-    //                 return <li key={index} className="error">{err.msg}</li>
-    //             })}
-    //         </ul>
-    //     }
-    // }
 
     return (
         
@@ -95,7 +85,11 @@ function Signup(props){
                         />
                     </div>
                 </div>
-                <button id="submit-button" type="submit">Sign up!</button>
+
+                <button id="submit-button" type="submit">Sign up</button>
+
+                <a href="/" className="redirect-home">Home</a>
+
             </form>
         </div>
     )
