@@ -1,6 +1,8 @@
 import React from "react";
 
-function Create(){
+function Create(props){
+
+
     return (
         <div className="Create">NOT DEVELOPED YET</div>
     )

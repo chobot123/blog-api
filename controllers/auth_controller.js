@@ -6,39 +6,48 @@ var bcrypt = require('bcryptjs');
 var passport = require('passport');
 var jwt = require('jsonwebtoken');
 
-// let refreshTokens = []
-
-// auth.post('/token', (req, res) => {
-//   const refreshToken = req.body.token
-//   if (refreshToken == null) return res.sendStatus(401)
-//   if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
-//   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-//     if (err) return res.sendStatus(403)
-//     const accessToken = generateAccessToken({ name: user.name })
-//     res.json({ accessToken: accessToken })
-//   })
-// })
-
 //refresh token -- TESTED
-exports.token_post = function(req, res) {
-    const refreshToken = req.body.token;
-    //check if token exists
-    if(refreshToken == null) return res.sendStatus(401);
-    //check if the given token is in the db
-    Refresh.find({"token": refreshToken})
-    .exec(function(err, foundToken) {
-        if(err || foundToken.length === 0) { return res.sendStatus(403);}
-        jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, (err, user) => {
-            if(err) {return res.sendStatus(403);}
-            //make a new access token
-            const accessToken = generateAccessToken({user});
-            res.json({ accessToken: accessToken});
+exports.refresh_token = function(req, res) {
+
+    //1) Get refresh token
+    const token = req.cookies.refreshToken;
+    //2)IF there is no refresh token then 'invalidate' access token
+    if(!token) return res.send({ accessToken: 'test1' })
+
+    //3)Verify the token
+    jwt.verify(token, process.env.JWT_REFRESH_KEY, (err, user) => {
+        if(err) return res.send({ accessToken: 'test2'});
+
+        //4) check if the user exists in the db and if he doesn't or there is
+        //an error then we invalidate the access token
+        User.find({"username": user.username})
+        .exec((err, user) => {
+            if(err || !user) return res.send({ accessToken: ''});
         })
+
+        //5) So we know USER exists and TOKEN exists, 
+        //   Let's create a new refresh and access token
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
+        user.refreshToken = refreshToken;
+        
+        //6) Send tokens
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            path: 'api/auth/refresh_token'
+        })
+
+        res.send({
+            accessToken
+        });
     })
 }
 
+
 //logout -- TESTED
 exports.logout_delete = function(req,res) {
+
+    res.clearCookie('refreshtoken', { path: '/refresh_token'})
     Refresh.findOneAndDelete({"token": req.body.token})
     .exec(function(err, deletedToken){
         if(err) {return res.json(err);}
@@ -48,28 +57,38 @@ exports.logout_delete = function(req,res) {
 
 //login -- TESTED
 exports.login_post = function(req, res) {
-
+    
     //authenticate if password is good
     passport.authenticate('local', {session: false}, (err, user) => {
         if(err || !user) {
             return res.status(401).json({
                 message: "Username or Password is Incorrect",
-                user : user,
+                // user : user,
             });
         }
         //get access key
         const accessToken = generateAccessToken(user);
+
         //get refresh key
-        const refreshToken = jwt.sign({user}, process.env.JWT_REFRESH_KEY, {expiresIn: '30d'});
+        const refreshToken = generateRefreshToken(user);
         
         //add the refresh key to the database and return both tokens as json
         let token = new Refresh({"token": refreshToken});
         token.save(function(err) {
+            
             if(err) {return res.sendStatus(403);}
-            return res.json({
-                accessToken: accessToken,
-                refreshToken: refreshToken,
-            })
+            
+            //send the accesstoken and user info and refreshtoken (but as cookie)
+            res.cookie('refreshToken', refreshToken, {
+                httpOnly: true,
+                path: 'api/auth/refresh_token'
+            });
+
+            res.send({
+                accessToken,
+                user: user, 
+            });
+
         })
     })(req, res);
 }
@@ -107,7 +126,9 @@ exports.signup_post = [
             let userFound = await User.find({"username": req.body.username})
             if(userFound.length > 0){
                 return res.status(409).json({
-                    error: "Username Already Exists"
+                    error: {
+                        msg: "Username Already Exists"
+                    }
                 })
             }
             //make the user a hashed password
@@ -131,4 +152,8 @@ exports.signup_post = [
 
 function generateAccessToken(user) {
   return jwt.sign({user}, process.env.JWT_SECRET_KEY, { expiresIn: '15s' })
+}
+
+function generateRefreshToken(user) {
+    return jwt.sign({user}, process.env.JWT_REFRESH_KEY, {expiresIn: '24h'});
 }

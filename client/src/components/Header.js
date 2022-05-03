@@ -14,7 +14,7 @@ function Header(props){
             Blog
             </NavLink>
             <div className="navbar">
-
+                
                 {   //if there is no user
                     (!props.user) ? 
                                     <div className="user-nav create">
@@ -27,7 +27,8 @@ function Header(props){
                                     <div className="user-nav">
                                         <NavLink id="home" exact to="/">Home</NavLink>
                                         {/* <NavLink id="dashboard" exact to="/dashboard">Dashboard</NavLink> */}
-                                        <NavLink className="create" exact to="/create">Create</NavLink>
+                                        <NavLink className="create" exact to="/create">Create Post</NavLink>
+                                        <NavLink className="logout" exact to="/logout">Logout</NavLink>
                                     </div>
 
                 }

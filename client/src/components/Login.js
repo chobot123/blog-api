@@ -12,13 +12,13 @@ function Login(props){
     let handleSubmit =  (e) => {
         e.preventDefault();
 
-        axios.post('http://localhost:4000/api/auth/login', 
+        axios.post('/api/auth/login', 
         {
             username: username,
             password: password
         })
         .then((res) =>{
-            props.setUser(res.data);
+            props.setUser(res.data.user);
             navigate('/');
         })
         .catch((err) => {

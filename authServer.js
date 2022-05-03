@@ -32,7 +32,11 @@ auth.use(express.json());
 auth.use(express.urlencoded({ extended: false }));
 auth.use(cookieParser());
 auth.use(express.static(path.join(__dirname, 'public')));
-auth.use(cors());
+auth.use(cors({
+          origin: 'http://localhost:8080',
+          credentials: true,
+}
+));
 
 //set up localstrategy
 passport.use(
@@ -75,5 +79,3 @@ auth.use(function(req, res, next) {
 });
 
 module.exports = auth;
-
-auth.listen(4000)

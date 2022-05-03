@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
 import Create from './components/Create';
+import Dashboard from './components/Dashboard';
 import Header from './components/Header';
 import Home from './components/Home';
 import Login from './components/Login';
@@ -11,6 +13,7 @@ import "./styles/App.css"
 function App() {
 
   const [user, setUser] = useState("");
+
 
   return (
     <Router>
@@ -41,11 +44,11 @@ function App() {
             element={<Create />}
           > 
           </Route>
-          {/* <Route
-            exact path='/login'
-            element={<Login setUser={setUser}/>}
+          <Route
+            exact path='/Dashboard'
+            element={<Dashboard user={user}/>}
           > 
-          </Route> */}
+          </Route>
         </Routes>
     </Router>
   );
