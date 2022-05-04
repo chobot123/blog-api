@@ -16,8 +16,7 @@ function Login(props){
         {
             username: username,
             password: password
-        }, 
-        props.config)
+        })
         .then((res) =>{
             console.log(res);
             props.setUser({accessToken: res.data.accessToken});

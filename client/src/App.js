@@ -14,23 +14,18 @@ function App() {
   const [user, setUser] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  }
+  axios.defaults.withCredentials = true;
 
   // first thing each mount is I want to check if there is a refresh token
   useEffect(() => {
 
     async function checkRefreshToken() {
 
-      await axios.post('http://localhost:8080/api/auth/refresh_token', config)
+      await axios.post('http://localhost:8080/api/auth/refresh_token')
       .then((token) => {
         console.log(token)
         setUser({
-          accessToken: token.accessToken,
+          accessToken: token.data.accessToken,
         })
         setLoading(false);
       })
@@ -50,11 +45,11 @@ function App() {
       <div>
         { (loading) ? <div>Loading...</div> :
             <Router>
-              <Header user={user} setUser={setUser} config={config}/>
+              <Header user={user} setUser={setUser}/>
               <Routes>
                 <Route
                   exact path='/'
-                  element={<Home />}
+                  element={<Home/>}
                 >  
                 </Route>
                 <Route
@@ -64,7 +59,7 @@ function App() {
                 </Route>
                 <Route
                   exact path='/login'
-                  element={<Login setUser={setUser} config={config}/>}
+                  element={<Login setUser={setUser}/>}
                 > 
                 </Route>
                 <Route

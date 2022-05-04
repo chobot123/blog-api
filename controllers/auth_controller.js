@@ -23,7 +23,7 @@ exports.refresh_token = function(req, res) {
             Refresh.findOneAndDelete({"token": token})
             .exec();
 
-            return res.send('');
+            return res.send({accessToken: ''});
         }
 
 
@@ -39,7 +39,7 @@ exports.refresh_token = function(req, res) {
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
 
-        //6) Update in DB
+        // 6) Update in DB
         Refresh.findOneAndUpdate(
             {
                 "token": token,
@@ -49,7 +49,7 @@ exports.refresh_token = function(req, res) {
             }
         )
         .exec((err) => {
-            if(err) return res.send('');
+            if(err) return res.send({accessToken: ''});
         })
 
         //7) Send tokens

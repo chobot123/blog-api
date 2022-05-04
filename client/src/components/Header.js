@@ -9,7 +9,7 @@ function Header(props){
 
         e.preventDefault();
         
-        axios.delete('http://localhost:8080/api/auth/logout', props.config)
+        axios.delete('http://localhost:8080/api/auth/logout')
         .then((res) => {
             console.log(res);
             props.setUser({});
