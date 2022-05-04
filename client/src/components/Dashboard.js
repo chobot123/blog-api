@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 
 function Dashboard () {
     
-    const [publishedPosts, setPublishedPosts] = useState("");
-    const [unpublishedPosts, setUnpublishedPosts] = useState("");
+    // const [publishedPosts, setPublishedPosts] = useState("");
+    // const [unpublishedPosts, setUnpublishedPosts] = useState("");
 
     return(
         <div className="dashboard">

@@ -20,6 +20,7 @@ var usersRouter = require('./routes/users');
 // var commentsRouter = require('./routes/comments');
 
 var app = express();
+app.use(cors());
 
 //Mongoose Connection
 var mongoDB = process.env.MONGODB_URL;
@@ -85,7 +86,6 @@ passport.deserializeUser(function(id, done) {
 app.use(session({secret: 'cats', resave: false, saveUninitialized: false}));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cors());
 
 app.use('/api/posts', postsRouter);
 app.use('/api/users', usersRouter);

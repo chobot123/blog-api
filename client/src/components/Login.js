@@ -12,17 +12,18 @@ function Login(props){
     let handleSubmit =  (e) => {
         e.preventDefault();
 
-        axios.post('/api/auth/login', 
+        axios.post('http://localhost:8080/api/auth/login', 
         {
             username: username,
             password: password
-        })
+        }, 
+        props.config)
         .then((res) =>{
-            props.setUser(res.data.user);
+            console.log(res);
+            props.setUser({accessToken: res.data.accessToken});
             navigate('/');
         })
         .catch((err) => {
-            console.log(err);
             if(err.response.status === 401){
                 setError({...err.response.data});
             }

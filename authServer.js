@@ -33,9 +33,9 @@ auth.use(express.urlencoded({ extended: false }));
 auth.use(cookieParser());
 auth.use(express.static(path.join(__dirname, 'public')));
 auth.use(cors({
-          origin: 'http://localhost:8080',
-          credentials: true,
-}
+  origin: 'http://localhost:3000',
+  credentials: true,
+},
 ));
 
 //set up localstrategy

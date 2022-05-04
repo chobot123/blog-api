@@ -8,15 +8,24 @@ var jwt = require('jsonwebtoken');
 
 //refresh token -- TESTED
 exports.refresh_token = function(req, res) {
-
+    
     //1) Get refresh token
     const token = req.cookies.refreshToken;
+
     //2)IF there is no refresh token then 'invalidate' access token
-    if(!token) return res.send({ accessToken: 'test1' })
+    if(!token) return res.send({ accessToken: '' })
 
     //3)Verify the token
     jwt.verify(token, process.env.JWT_REFRESH_KEY, (err, user) => {
-        if(err) return res.send({ accessToken: 'test2'});
+        //if there is an error ?=== no refresh token/wrong refresh token
+        //so find in db and delete
+        if(err) {
+            Refresh.findOneAndDelete({"token": token})
+            .exec();
+
+            return res.send('');
+        }
+
 
         //4) check if the user exists in the db and if he doesn't or there is
         //an error then we invalidate the access token
@@ -29,34 +38,51 @@ exports.refresh_token = function(req, res) {
         //   Let's create a new refresh and access token
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
-        user.refreshToken = refreshToken;
-        
-        //6) Send tokens
+
+        //6) Update in DB
+        Refresh.findOneAndUpdate(
+            {
+                "token": token,
+            },
+            {
+                "token": refreshToken,
+            }
+        )
+        .exec((err) => {
+            if(err) return res.send('');
+        })
+
+        //7) Send tokens
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            path: 'api/auth/refresh_token'
+            path: 'api/auth/refresh_token',
+            secure: false,
         })
 
         res.send({
             accessToken
         });
+        
     })
 }
 
 
 //logout -- TESTED
-exports.logout_delete = function(req,res) {
-
-    res.clearCookie('refreshtoken', { path: '/refresh_token'})
-    Refresh.findOneAndDelete({"token": req.body.token})
-    .exec(function(err, deletedToken){
+exports.logout = function(req,res) {
+    Refresh.findOneAndDelete({"token": req.cookies.refreshToken})
+    .exec(function(err){
         if(err) {return res.json(err);}
-        return res.json({message: "Deletion Success: " + deletedToken});
+        res.clearCookie('refreshToken', { path: 'api/auth/refresh_token'})
+        return res.send(
+            {   
+                refreshToken: req.cookies.refreshToken,
+                message: 'Logged Out'
+            });
     })
 }
 
 //login -- TESTED
-exports.login_post = function(req, res) {
+exports.login = function(req, res) {
     
     //authenticate if password is good
     passport.authenticate('local', {session: false}, (err, user) => {
@@ -81,12 +107,13 @@ exports.login_post = function(req, res) {
             //send the accesstoken and user info and refreshtoken (but as cookie)
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
-                path: 'api/auth/refresh_token'
+                path: 'api/auth/refresh_token',
+                secure: false,
             });
 
             res.send({
                 accessToken,
-                user: user, 
+                // user: user, 
             });
 
         })
@@ -94,7 +121,7 @@ exports.login_post = function(req, res) {
 }
 
 //sign up --TESTED
-exports.signup_post = [
+exports.signup = [
 
     body("username").trim().isLength({min: 6}).withMessage("The Username Must Have Atleast 6 Characters").escape(),
     body("password").trim().isStrongPassword().withMessage(`Please Have Atleast 8 Characters, 
@@ -151,7 +178,7 @@ exports.signup_post = [
 ]
 
 function generateAccessToken(user) {
-  return jwt.sign({user}, process.env.JWT_SECRET_KEY, { expiresIn: '15s' })
+  return jwt.sign({user}, process.env.JWT_SECRET_KEY, { expiresIn: '5m' })
 }
 
 function generateRefreshToken(user) {

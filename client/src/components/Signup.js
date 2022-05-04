@@ -21,7 +21,7 @@ function Signup(props){
         e.preventDefault();
 
         //fetch the data to api (axios(url, body, headers))
-        axios.post('http://localhost:4000/api/auth/signup',
+        axios.post('http://localhost:8080/api/auth/signup',
                 {
                     username: username,
                     password: password,

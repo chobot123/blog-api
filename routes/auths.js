@@ -2,16 +2,15 @@ var express = require('express');
 var router = express.Router();
 var auth_controller = require('../controllers/auth_controller');
 
-// router.post('/token', auth_controller.token_post);
 
 //login (get token)
-router.post('/login', auth_controller.login_post);
+router.post('/login', auth_controller.login);
 
 //logout (remove token)
-router.delete('/logout', auth_controller.logout_delete);
+router.delete('/logout', auth_controller.logout);
 
 //sign up
-router.post('/signup', auth_controller.signup_post);
+router.post('/signup', auth_controller.signup);
 
 //refresh token
 router.post('/refresh_token', auth_controller.refresh_token);
