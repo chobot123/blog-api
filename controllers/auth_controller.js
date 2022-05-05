@@ -15,6 +15,8 @@ exports.refresh_token = async function(req, res) {
 
     //3)Verify the token
     jwt.verify(token, process.env.JWT_REFRESH_KEY, (err, user) => {
+        console.log(user);
+
         //if there is an error ?=== no refresh token/wrong refresh token
         //so find in db and delete
 
@@ -37,6 +39,8 @@ exports.refresh_token = async function(req, res) {
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
 
+    
+
         // 6) Update in DB
         Refresh.findOneAndUpdate(
             {
@@ -57,8 +61,9 @@ exports.refresh_token = async function(req, res) {
             secure: false,
         })
 
-        return res.send({
-            accessToken
+        res.send({
+            accessToken,
+            user: {_id: user._id,} 
         });
         
     })
@@ -91,6 +96,8 @@ exports.login = function(req, res) {
                 // user : user,
             });
         }
+
+        console.log(user);
         //get access key
         const accessToken = generateAccessToken(user);
 
@@ -112,7 +119,7 @@ exports.login = function(req, res) {
 
             res.send({
                 accessToken,
-                user: user, 
+                user: {_id: user._id,} 
             });
 
         })
@@ -177,9 +184,9 @@ exports.signup = [
 ]
 
 function generateAccessToken(user) {
-  return jwt.sign({user}, process.env.JWT_SECRET_KEY, { expiresIn: '5m' })
+  return jwt.sign({_id: user._id, username: user.username}, process.env.JWT_SECRET_KEY, { expiresIn: '5m' })
 }
 
 function generateRefreshToken(user) {
-    return jwt.sign({user}, process.env.JWT_REFRESH_KEY, {expiresIn: '24h'});
+    return jwt.sign({_id: user._id, username: user.username}, process.env.JWT_REFRESH_KEY, {expiresIn: '24h'});
 }

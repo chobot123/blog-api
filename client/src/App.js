@@ -18,7 +18,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   axios.defaults.withCredentials = true;
-  // axios.defaults.headers.common['authorization'] = 'Bearer ' + user.accessToken;
+  axios.defaults.headers.common['authorization'] = 'Bearer ' + user.accessToken;
 
   // first thing each mount is I want to check if there is a refresh token
   useEffect(() => {
@@ -28,6 +28,7 @@ function App() {
       .then((token) => {
         setUser({
           accessToken: token.data.accessToken,
+          id: token.data.user._id,
         })
       })
       .catch((err) => {
@@ -87,7 +88,7 @@ function App() {
                 </Route>
                 <Route
                   exact path='/dashboard'
-                  element={<Dashboard user={user} posts={posts}/>}
+                  element={<Dashboard user={user} posts={posts} setPosts={setPosts}/>}
                 > 
                 </Route>
                 {posts.map((post) => 

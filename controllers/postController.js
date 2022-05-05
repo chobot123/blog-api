@@ -57,13 +57,15 @@ exports.post_create = [
 
 //publish post -- TESTED
 exports.post_publish = function(req, res) {
+    console.log(req.params.id);
 
     Post.findByIdAndUpdate(req.params.id, {"published": true})
     .populate("user")
     .exec(function(err, results){
-        if(err){return res.json(err);}
+        if(err){
+                return res.json(err);}
         else {
-            return res.json("Published Post: " + results);
+            return res.send(!results.published);
         }
     })
 }
@@ -76,7 +78,7 @@ exports.post_unpublish = function(req, res) {
     .exec(function(err, results){
         if(err) {return res.json(err);}
         else {
-            return res.json("Unpublished Post: " + results);
+            return res.send(!results.published);
         }
     })
 }

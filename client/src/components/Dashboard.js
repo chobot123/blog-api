@@ -3,27 +3,40 @@
 import { NavLink } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
 function Dashboard (props) {
     
-    //lets get the posts with the user id
+    
+    let updateStatus = (post, status) => {
+
+        let posts = props.posts;
+        posts.map((oldPost) => {
+            if(oldPost === post){
+                return oldPost.published = status;
+            }
+            return oldPost;
+        })
+
+        props.setPosts(posts);
+    }
 
     //display if there are any published/unpublished posts
     let toggleStatus = (e, post) => {
         
         e.preventDefault();
-        console.log(props.user.accessToken);
+
         //if the post isn't published -> publish, else vice versa
         if(!post.published){
             axios.post(`http://localhost:4000/api/posts/${post._id}/publish`, {
                 headers: {
-                    "authorization": props.user.accessToken
+                    "authorization": 'Bearer ' + props.user.accessToken
                 },
                 withCredentials: true,
             })
             .then((res) => {
-                console.log(res);
+                updateStatus(post, res.data);
+                console.log(props.posts);
             })
             .catch((err) => console.log(err))
         }
@@ -44,8 +57,6 @@ function Dashboard (props) {
 
     return(
         <div className="dashboard">
-            <div>{props.posts.length}</div>
-            <div>{props.user.id}</div>
             <div id="title">My Dashboard</div>
             <div className="posts published">
                 <div id="section-header">Published Posts</div>
