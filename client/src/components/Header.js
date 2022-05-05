@@ -2,18 +2,23 @@ import axios from "axios";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import "../styles/header.css";
+import { useNavigate } from "react-router-dom";
 
 function Header(props){
+
+    const navigate = useNavigate();
 
     let handleLogout = (e) => {
 
         e.preventDefault();
         
-        axios.delete('http://localhost:8080/api/auth/logout')
+        axios.delete('http://localhost:8080/api/auth/logout', {
+            withCredentials: true,
+        })
         .then((res) => {
             console.log(res);
             props.setUser({});
-            window.location.reload();
+            navigate('/');
         })
         .catch((err) => {console.log(err)})
     }
@@ -39,7 +44,7 @@ function Header(props){
 
                                     <div className="user-nav">
                                         <NavLink id="home" exact to="/">Home</NavLink>
-                                        {/* <NavLink id="dashboard" exact to="/dashboard">Dashboard</NavLink> */}
+                                        <NavLink id="dashboard" exact to="/dashboard">Dashboard</NavLink>
                                         <NavLink className="create" exact to="/create">Create Post</NavLink>
                                         <button className="logout" onClick={(e) => handleLogout(e)}>Logout</button>
                                     </div>

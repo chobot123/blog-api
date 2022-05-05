@@ -27,12 +27,11 @@ exports.post_get = function(req, res) {
 
 //create post -- TESTED
 exports.post_create = [
-
+    
     body("title").trim().isLength({min: 1}).withMessage("Please Enter a Title").escape(),
     body("text").trim().isLength({min: 1}).withMessage("Please Enter Content").escape(),
     
     (req, res) => {
-
         const errors = validationResult(req);
 
         if(!errors.isEmpty()){
@@ -43,7 +42,7 @@ exports.post_create = [
 
             let post = new Post({
                 title: req.body.title,
-                user: req.authData.user,
+                user: req.authData.user._id,
                 text: req.body.text
             });
 

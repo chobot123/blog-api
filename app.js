@@ -20,7 +20,11 @@ var usersRouter = require('./routes/users');
 // var commentsRouter = require('./routes/comments');
 
 var app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true,
+},
+));
 
 //Mongoose Connection
 var mongoDB = process.env.MONGODB_URL;

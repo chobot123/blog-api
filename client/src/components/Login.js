@@ -15,11 +15,15 @@ function Login(props){
         axios.post('http://localhost:8080/api/auth/login', 
         {
             username: username,
-            password: password
+            password: password,
         })
         .then((res) =>{
             console.log(res);
-            props.setUser({accessToken: res.data.accessToken});
+            props.setUser(
+                {
+                    accessToken: res.data.accessToken,
+                    id: res.data.user._id,
+                });
             navigate('/');
         })
         .catch((err) => {

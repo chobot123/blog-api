@@ -7,11 +7,9 @@ var passport = require('passport');
 var jwt = require('jsonwebtoken');
 
 //refresh token -- TESTED
-exports.refresh_token = function(req, res) {
-    
+exports.refresh_token = async function(req, res) {
     //1) Get refresh token
     const token = req.cookies.refreshToken;
-
     //2)IF there is no refresh token then 'invalidate' access token
     if(!token) return res.send({ accessToken: '' })
 
@@ -19,13 +17,13 @@ exports.refresh_token = function(req, res) {
     jwt.verify(token, process.env.JWT_REFRESH_KEY, (err, user) => {
         //if there is an error ?=== no refresh token/wrong refresh token
         //so find in db and delete
+
         if(err) {
             Refresh.findOneAndDelete({"token": token})
             .exec();
 
             return res.send({accessToken: ''});
         }
-
 
         //4) check if the user exists in the db and if he doesn't or there is
         //an error then we invalidate the access token
@@ -59,7 +57,7 @@ exports.refresh_token = function(req, res) {
             secure: false,
         })
 
-        res.send({
+        return res.send({
             accessToken
         });
         
@@ -69,6 +67,7 @@ exports.refresh_token = function(req, res) {
 
 //logout -- TESTED
 exports.logout = function(req,res) {
+    // console.log(res.cookies.refreshToken);
     Refresh.findOneAndDelete({"token": req.cookies.refreshToken})
     .exec(function(err){
         if(err) {return res.json(err);}
@@ -113,7 +112,7 @@ exports.login = function(req, res) {
 
             res.send({
                 accessToken,
-                // user: user, 
+                user: user, 
             });
 
         })
