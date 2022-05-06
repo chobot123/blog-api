@@ -16,9 +16,31 @@ function App() {
   const [user, setUser] = useState("");
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [nav, setNav] = useState(false);
 
   axios.defaults.withCredentials = true;
   axios.defaults.headers.common['authorization'] = 'Bearer ' + user.accessToken;
+  axios.interceptors.response.use((response) => {
+    return response;
+  }, async (error) => {
+    const originalRequest = error.config;
+    if(error.response.status === 401) {
+      return  await axios.post('http://localhost:8080/api/auth/refresh_token')
+              .then((res) => {
+                if(res.status === 200) {
+                  setUser({
+                    accessToken: res.data.accessToken,
+                    id: res.data.user._id,
+                  })
+                  originalRequest.headers['authorization'] = 'Bearer ' + res.data.accessToken;
+                  return axios.request(originalRequest);
+                }
+              })
+    }
+    else {
+      return Promise.reject('resolved');
+    }
+  });
 
   // first thing each mount is I want to check if there is a refresh token
   useEffect(() => {
@@ -26,10 +48,18 @@ function App() {
     async function checkRefreshToken() {
       await axios.post('http://localhost:8080/api/auth/refresh_token')
       .then((token) => {
-        setUser({
-          accessToken: token.data.accessToken,
-          id: token.data.user._id,
-        })
+        if(!token.data.user){
+          setUser({
+            accessToken: token.data.accessToken,
+            id: ""
+          })
+        }
+        else {
+          setUser({
+            accessToken: token.data.accessToken,
+            id: token.data.user._id
+          })
+        }
       })
       .catch((err) => {
         console.log(err)
@@ -48,17 +78,17 @@ function App() {
     checkRefreshToken();
     getPosts();
     
-  }, [])
+  }, [nav])
 
-  //check for ALL POSTS on mount
-  useEffect(() => {
-    console.log(posts);
-  }, [posts])
+  // //check for ALL POSTS on mount
+  // useEffect(() => {
+  //   setLoading(false);
+  //   console.log(posts);
+  // }, [posts])
 
-  useEffect(() => {
-    console.log(user);
-  }, [user])
-
+  // useEffect(() => {
+  //   console.log(user);
+  // }, [user])
 
   return (
       <div>
@@ -83,7 +113,7 @@ function App() {
                 </Route>
                 <Route
                   exact path='/create'
-                  element={<Create user={user} />}
+                  element={<Create user={user} posts={posts} nav={nav} setNav={setNav} setPosts={setPosts}/>}
                 > 
                 </Route>
                 <Route

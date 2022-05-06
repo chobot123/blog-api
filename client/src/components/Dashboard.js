@@ -10,7 +10,7 @@ function Dashboard (props) {
     
     let updateStatus = (post, status) => {
 
-        let posts = props.posts;
+        let posts = [...props.posts];
         posts.map((oldPost) => {
             if(oldPost === post){
                 return oldPost.published = status;
@@ -36,7 +36,6 @@ function Dashboard (props) {
             })
             .then((res) => {
                 updateStatus(post, res.data);
-                console.log(props.posts);
             })
             .catch((err) => console.log(err))
         }
@@ -49,7 +48,7 @@ function Dashboard (props) {
                 }
             })
             .then((res) => {
-                console.log(res);
+                updateStatus(post, res.data);
             })
             .catch((err) => console.log(err))
         }

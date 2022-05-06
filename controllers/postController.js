@@ -32,9 +32,11 @@ exports.post_create = [
     body("text").trim().isLength({min: 1}).withMessage("Please Enter Content").escape(),
     
     (req, res) => {
+
         const errors = validationResult(req);
 
         if(!errors.isEmpty()){
+
             return res.json(errors.array());
         }
 
@@ -42,13 +44,12 @@ exports.post_create = [
 
             let post = new Post({
                 title: req.body.title,
-                user: req.authData.user._id,
+                user: req.authData._id,
                 text: req.body.text
             });
 
             post.save(function(err, thisPost){
                 if(err) {return res.json(err);}
-                console.log("Create Post: ", thisPost);
                 return res.json(thisPost);
             })
         }
@@ -57,7 +58,6 @@ exports.post_create = [
 
 //publish post -- TESTED
 exports.post_publish = function(req, res) {
-    console.log(req.params.id);
 
     Post.findByIdAndUpdate(req.params.id, {"published": true})
     .populate("user")

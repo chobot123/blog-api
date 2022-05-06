@@ -184,7 +184,7 @@ exports.signup = [
 ]
 
 function generateAccessToken(user) {
-  return jwt.sign({_id: user._id, username: user.username}, process.env.JWT_SECRET_KEY, { expiresIn: '5m' })
+  return jwt.sign({_id: user._id, username: user.username}, process.env.JWT_SECRET_KEY, { expiresIn: '15s' })
 }
 
 function generateRefreshToken(user) {

@@ -12,7 +12,7 @@ function Create(props){
     const editorRef = useRef(null);
 
     let handleSubmit = (e) => {
-        
+
         e.preventDefault();
 
         //submit post data to server
@@ -21,16 +21,15 @@ function Create(props){
                 "authorization": props.user.accessToken
             },
             withCredentials: true,
-            data : {
-                title: postTitle,
-                text: postContent,
-            }
+            title: postTitle,
+            text: postContent,
         })
         .then(() => {
-            navigate('/')
+            props.setNav(true);
+            navigate('/dashboard')
 
         })
-        .catach((err) => {
+        .catch((err) => {
             console.log(err);
         })
 
@@ -41,25 +40,22 @@ function Create(props){
                 <div id="form-title">Create Blog Post</div>
                 <div className="form-body">
                     <div id="post-title">
-                        <label for="title">Title:</label>
-                        <input type="text" id="title" name="title" onChange={(e) => setPostTitle(e.target.value)}/>
+                        <label htmlFor="title">Title:</label>
+                        <input type="text" id="title" name="title" required onChange={(e) => setPostTitle(e.target.value)}/>
                     </div>
                     <div id="post-content">
-                        <label for="content">Content:</label>
+                        <label htmlFor="content">Content:</label>
                         <Editor apiKey="odysb9itemhhioc0e9wswexnphs05fmqjao24y5ul5el42z5"
-                            onChange={(e) => setPostContent(e.target.value)}
+                            onEditorChange={(e) => setPostContent(e)}
                             onInit={(evt, editor) => editorRef.current = editor}
                             name="content"
                             id="content"
+                            required
                             initialValue=""
                             init={{
                             height: 400,
                             menubar: false,
-                            plugins: [
-                                'advlist autolink lists link image charmap print preview anchor',
-                                'searchreplace visualblocks code fullscreen',
-                                'insertdatetime media table paste code help wordcount'
-                            ],
+                            plugins: 'a11ychecker advcode casechange export formatpainter image editimage linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tableofcontents tinymcespellchecker',
                             toolbar: 'undo redo | formatselect | ' +
                             'bold italic backcolor | alignleft aligncenter ' +
                             'alignright alignjustify | bullist numlist outdent indent | ' +
