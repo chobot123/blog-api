@@ -25,7 +25,6 @@ function Create(props){
             text: postContent,
         })
         .then(() => {
-            props.setNav(true);
             navigate('/dashboard')
 
         })

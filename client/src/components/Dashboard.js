@@ -3,12 +3,19 @@
 import { NavLink } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 // import { useEffect } from "react";
 
 function Dashboard (props) {
     
+    const navigate = useNavigate();
+
+    const handleNavigate = (post) => {
+
+        return navigate('/posts/' + post._id);
+    }
     
-    let updateStatus = (post, status) => {
+    const updateStatus = (post, status) => {
 
         let posts = [...props.posts];
         posts.map((oldPost) => {
@@ -22,7 +29,7 @@ function Dashboard (props) {
     }
 
     //display if there are any published/unpublished posts
-    let toggleStatus = (e, post) => {
+    const toggleStatus = (e, post) => {
         
         e.preventDefault();
 
@@ -86,18 +93,19 @@ function Dashboard (props) {
                         post.user._id === props.user.id && !post.published
                         ).map((post) => (
                             <div className="post-card" key={post._id}>
-                                <NavLink 
+                                <div 
                                     id="card"
-                                    exact to={'posts/post/' + post._id}
+                                    onClick={() => handleNavigate(post)}
                                 >
                                     <div className="post-card">
                                         <div id="title">{post.title}</div>
                                         <div id="created">{`By ${post.user.username} on ${moment(post.timestamp).format('llll')}`}</div>
                                     </div>
-                                </NavLink>
+                                </div>
                                 <button id="toggle-status" onClick={(e) => toggleStatus(e, post)}>Publish</button>
                             </div>
-                        ))
+                        )
+                    )
                 }
             </div>
         </div>

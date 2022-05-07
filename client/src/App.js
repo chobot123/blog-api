@@ -16,7 +16,6 @@ function App() {
   const [user, setUser] = useState("");
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [nav, setNav] = useState(false);
 
   axios.defaults.withCredentials = true;
   axios.defaults.headers.common['authorization'] = 'Bearer ' + user.accessToken;
@@ -57,7 +56,8 @@ function App() {
         else {
           setUser({
             accessToken: token.data.accessToken,
-            id: token.data.user._id
+            id: token.data.user._id,
+            username: token.data.user.username,
           })
         }
       })
@@ -65,6 +65,11 @@ function App() {
         console.log(err)
       })
     }
+
+    checkRefreshToken(); 
+  }, [])
+
+  useEffect(() => {
 
     async function getPosts() {
       await axios.get('http://localhost:4000/api/posts/')
@@ -75,20 +80,9 @@ function App() {
       .catch((err) => {console.log(err)})
     }
 
-    checkRefreshToken();
     getPosts();
-    
-  }, [nav])
 
-  // //check for ALL POSTS on mount
-  // useEffect(() => {
-  //   setLoading(false);
-  //   console.log(posts);
-  // }, [posts])
-
-  // useEffect(() => {
-  //   console.log(user);
-  // }, [user])
+  }, [])
 
   return (
       <div>
@@ -113,7 +107,7 @@ function App() {
                 </Route>
                 <Route
                   exact path='/create'
-                  element={<Create user={user} posts={posts} nav={nav} setNav={setNav} setPosts={setPosts}/>}
+                  element={<Create user={user} posts={posts} setPosts={setPosts}/>}
                 > 
                 </Route>
                 <Route
@@ -124,8 +118,8 @@ function App() {
                 {posts.map((post) => 
                     <Route
                         key={post._id}
-                        exact path={'/posts/post/' + post._id}
-                        element={<Post />}
+                        exact path={'/posts/' + post._id}
+                        element={<Post post={post} user={user}/>}
                     >
                     </Route>
                   )
