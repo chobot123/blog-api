@@ -6,6 +6,8 @@ function Post (props){
 
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
+
+    //CONSIDER CHANGING IF USER IS --NOT-- SIGNED IN
     const [username, setUsername] = useState(props.user.username);
 
     const handleFormSubmit = (e) => {
@@ -40,7 +42,9 @@ function Post (props){
 
     useEffect(() => {
         console.log(username);
-    }, [username])
+        console.log(comments);
+    }, [username, comments])
+
 
     return (
         <div className="post-container">
@@ -71,7 +75,7 @@ function Post (props){
                     <button type="submit">Comment</button>
                 </form>
                 <div className="comments" hidden={(!comments) ? true: false}>
-                    {/* {
+                    {
                         comments.map((comment) => (
                             <div className="comment-card" key={comment._id}>
                                 <div id="publisher">{comment.username}</div>
@@ -79,7 +83,7 @@ function Post (props){
                                 <div id="date">{moment(comment.timestamp).format('llll')}</div>
                             </div>
                         ))
-                    } */}
+                    }
                 </div>
             </div>
         </div>
