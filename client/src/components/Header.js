@@ -16,7 +16,6 @@ function Header(props){
             withCredentials: true,
         })
         .then((res) => {
-            console.log(res);
             props.setUser({});
             navigate('/');
         })

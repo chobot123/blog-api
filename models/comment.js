@@ -4,10 +4,10 @@ var Schema = mongoose.Schema;
 
 var CommentSchema = new Schema({
 
-    user: {
-                type: Schema.Types.ObjectId,
-                ref: 'User',
-                required: true,
+    username: {
+               type: String,
+               minLength: 3,
+               required: true,
           },
     
     text: {
@@ -33,3 +33,5 @@ CommentSchema
 .get(function(){
       return DateTime.fromJSDate(this.timestamp).toFormat('yyyy-mm-dd @ hh:mm');
 })
+
+module.exports = mongoose.model("Comment", CommentSchema);

@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import axios from "axios";
+import Update from "./Update";
 
 function Post (props){
 
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
+    const [update, setUpdate] = useState(false);
+    const [post, setPost] = useState(props.post);
 
     //CONSIDER CHANGING IF USER IS --NOT-- SIGNED IN
     const [username, setUsername] = useState(props.user.username);
 
     const handleFormSubmit = (e) => {
-        
         e.preventDefault();
-        
-        axios.post(`http://localhost:4000/api/posts/${props.post._id}/create`,
+
+        axios.post(`http://localhost:4000/api/posts/${post._id}/comments/create`,
             {
                 headers: {
                     "authorization": props.user.accessToken,
@@ -24,13 +26,20 @@ function Post (props){
                 username: username,
             }
         )
-        .then((res) => console.log(res))
+        .then((res) => {
+            setComments(prev => [...prev, res.data])
+        })
         .catch((err) => console.log(err))
+    }
+
+    const handleUpdate = (e) => {
+        e.preventDefault();
+        setUpdate(true);
     }
 
     useEffect(() => {
 
-        axios.get(`http://localhost:4000/api/posts/${props.post._id}/`,
+        axios.get(`http://localhost:4000/api/posts/${post._id}/comments/`,
         {
             withCredentials: true,
         })
@@ -38,21 +47,24 @@ function Post (props){
             setComments(response.data);
         })
         .catch((err) => console.log(err))
-    }, [props.post._id])
-
-    useEffect(() => {
-        console.log(username);
-        console.log(comments);
-    }, [username, comments])
-
+    }, [post])
 
     return (
         <div className="post-container">
-            <div className="post-content">
-                <div id="title">{props.post.title}</div>
-                <div id="published">By {props.post.user.username} on {moment(props.post.timestamp).format('llll')}</div>
-                <div id="text" dangerouslySetInnerHTML={{__html: props.post.text}}/>
-            </div>
+            {(update) ? 
+                    <Update post={post} setPost={setPost} setUpdate={setUpdate} user={props.user}/> 
+                    :
+                    <div className="post-content">
+                    <div id="title">{post.title}
+                        <div className="update-post" hidden={(props.user.id === post.user._id) ? false : true}>
+                            <button id="edit-button" onClick={(e) => handleUpdate(e)}>EDIT</button>
+                            <button id="delete-button">DELETE</button>
+                        </div>
+                    </div>
+                    <div id="published">By {post.user.username} on {moment(post.timestamp).format('llll')}</div>
+                    <div id="text" dangerouslySetInnerHTML={{__html: post.text}}/>
+                </div>
+            }
             <div className="post-comments"> Comments 
                 <form className="comment-form"
                       onSubmit={(e) => handleFormSubmit(e)}        
@@ -74,13 +86,13 @@ function Post (props){
                               placeholder="Write Your Comment Here..."/>                 
                     <button type="submit">Comment</button>
                 </form>
-                <div className="comments" hidden={(!comments) ? true: false}>
+                <div className="comment-section">
                     {
                         comments.map((comment) => (
                             <div className="comment-card" key={comment._id}>
-                                <div id="publisher">{comment.username}</div>
-                                <div id="comment">{comment.text}</div>
-                                <div id="date">{moment(comment.timestamp).format('llll')}</div>
+                                <div id="comment-user">{comment.username}</div>
+                                <div id="comment-body">{comment.text}</div>
+                                <div id="comment-published">{moment(comment.timestamp).format('llll')}</div>
                             </div>
                         ))
                     }

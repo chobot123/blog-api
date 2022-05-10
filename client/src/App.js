@@ -15,7 +15,7 @@ function App() {
   //user => OBJ that's going to hold the access Token
   const [user, setUser] = useState("");
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   axios.defaults.withCredentials = true;
   axios.defaults.headers.common['authorization'] = 'Bearer ' + user.accessToken;
@@ -37,7 +37,7 @@ function App() {
               })
     }
     else {
-      return Promise.reject('resolved');
+      throw error;
     }
   });
 
@@ -69,23 +69,23 @@ function App() {
     checkRefreshToken(); 
   }, [])
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    async function getPosts() {
-      await axios.get('http://localhost:4000/api/posts/')
-      .then((res) => {
-        setPosts(res.data)
-        setLoading(false);
-      })
-      .catch((err) => {console.log(err)})
-    }
+  //   async function getPosts() {
+  //     await axios.get('http://localhost:4000/api/posts/')
+  //     .then((res) => {
+  //       setPosts(res.data)
+  //       setLoading(false);
+  //     })
+  //     .catch((err) => {console.log(err)})
+  //   }
 
-    getPosts();
+  //   getPosts();
 
-  }, [])
+  // }, [])
 
   return (
-      <div>
+      <div className='content'>
         { (loading) ? <div>Loading...</div> :
             <Router>
               <Header user={user} setUser={setUser}/>

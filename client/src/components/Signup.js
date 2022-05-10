@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import '../styles/Signup.css'
 
-function Signup(props){
+function Signup(){
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -10,43 +11,34 @@ function Signup(props){
     const [error, setError] = useState([]);
     const navigate = useNavigate();
 
-    // const headers = {
-    //     headers: {
-    //         "Content-Type": "application/json"
-    //     }
-    // };
-
-    
     let handleSubmit = async (e) => {
         e.preventDefault();
 
-        //fetch the data to api (axios(url, body, headers))
-        axios.post('http://localhost:8080/api/auth/signup',
+        try{
+            const response = await axios.post('http://localhost:8080/api/auth/signup',
                 {
                     username: username,
                     password: password,
                     confirmpassword: confirmpassword,
                 },
-        )
-        //move the user to the login page
-        .then(() => {
-            navigate("/login");
-        })
-        //catch any errors the server returns, if its an input error => render
-        .catch((err) => {
-            console.log(err);
+            );
+            navigate('/login');
+            return response.data;
+        }
+        catch(err){
+            console.log(err.response);
             if(err.response.status === 401 || err.response.status === 409){
                 (err.response.data.errors) ? setError([...err.response.data.errors]) : setError([err.response.data.error]);
-                console.log(error);
             }
             else { console.log(err);}
-        })
+        }
     }
 
     return (
         
-        <div className="signup-form"> 
-            <form onSubmit={(e) => handleSubmit(e)}>
+        <div className="signup-container">
+            <div id="blog-name">Blog</div> 
+            <form className="signup-form" onSubmit={(e) => handleSubmit(e)}>
                 <div id="form-title">Sign Up</div>
                 <ul className="error-list"></ul>
                 {
@@ -85,10 +77,11 @@ function Signup(props){
                         />
                     </div>
                 </div>
-
-                <button id="submit-button" type="submit">Sign up</button>
-
-                <a href="/" className="redirect-home">Home</a>
+                <div className="buttons">
+                    <button id="submit-button" type="submit">Sign up</button>
+                    <a href="/" className="redirect-home">Home</a>
+                </div>
+                
 
             </form>
         </div>

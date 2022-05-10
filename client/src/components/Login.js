@@ -9,13 +9,14 @@ function Login(props){
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    let handleSubmit =  (e) => {
+    let handleSubmit =  async (e) => {
         e.preventDefault();
 
-        axios.post('http://localhost:8080/api/auth/login', 
+        await axios.post('http://localhost:8080/api/auth/login', 
         {
             username: username,
             password: password,
+            withCredentials: true,
         })
         .then((res) =>{
             console.log(res);
@@ -27,6 +28,7 @@ function Login(props){
             navigate('/');
         })
         .catch((err) => {
+            console.log(err);
             if(err.response.status === 401){
                 setError({...err.response.data});
             }

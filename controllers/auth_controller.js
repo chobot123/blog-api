@@ -13,9 +13,16 @@ exports.refresh_token = async function(req, res) {
     //2)IF there is no refresh token then 'invalidate' access token
     if(!token) return res.send({ accessToken: '' })
 
+
+    //If there is a refresh token but it is not found in the DB, then delete
+    let checkValid = await Refresh.find({"token": token});
+    if(checkValid.length === 0){
+        res.clearCookie("refreshToken");
+        return res.send({ accessToken: ''});
+    }
+
     //3)Verify the token
     jwt.verify(token, process.env.JWT_REFRESH_KEY, (err, user) => {
-        console.log(user);
 
         //if there is an error ?=== no refresh token/wrong refresh token
         //so find in db and delete
@@ -63,7 +70,7 @@ exports.refresh_token = async function(req, res) {
 
         res.send({
             accessToken,
-            user: {_id: user._id,} 
+            user: {_id: user._id, username: user.username} 
         });
         
     })
@@ -91,13 +98,19 @@ exports.login = function(req, res) {
     //authenticate if password is good
     passport.authenticate('local', {session: false}, (err, user) => {
         if(err || !user) {
-            return res.status(401).json({
+
+            res.status(409).json({
                 message: "Username or Password is Incorrect",
                 // user : user,
             });
+            return;
         }
 
-        console.log(user);
+        //if for some reason a refresh token is received on login, remove that said refresh token
+        if(req.cookies.refreshToken){
+            Refresh.findOneAndDelete({"token": req.cookies.refreshToken})
+            .exec();
+        }
         //get access key
         const accessToken = generateAccessToken(user);
 
@@ -108,7 +121,7 @@ exports.login = function(req, res) {
         let token = new Refresh({"token": refreshToken});
         token.save(function(err) {
             
-            if(err) {return res.sendStatus(403);}
+            if(err) {return res.sendStatus(409);}
             
             //send the accesstoken and user info and refreshtoken (but as cookie)
             res.cookie('refreshToken', refreshToken, {
@@ -119,7 +132,7 @@ exports.login = function(req, res) {
 
             res.send({
                 accessToken,
-                user: {_id: user._id,} 
+                user: {_id: user._id} 
             });
 
         })
@@ -149,16 +162,20 @@ exports.signup = [
 
         //if there are errors, resend a json with the sanitized values
         if(!errors.isEmpty()){
-            return res.status(409).json({
-                errors: errors.array(),
-                username: req.body.username,
+            console.log(`this error #1`)
+            return res.status(409).send({
+                error: {
+                    errors: errors.array(),
+                    username: req.body.username,
+                }
             });
         }
         else {
             //if username is taken return error msg
             let userFound = await User.find({"username": req.body.username})
             if(userFound.length > 0){
-                return res.status(409).json({
+                console.log(`this error #2`)
+                return res.status(409).send({
                     error: {
                         msg: "Username Already Exists"
                     }
@@ -184,7 +201,7 @@ exports.signup = [
 ]
 
 function generateAccessToken(user) {
-  return jwt.sign({_id: user._id, username: user.username}, process.env.JWT_SECRET_KEY, { expiresIn: '15s' })
+  return jwt.sign({_id: user._id, username: user.username}, process.env.JWT_SECRET_KEY, { expiresIn: '1h' })
 }
 
 function generateRefreshToken(user) {

@@ -87,31 +87,34 @@ exports.post_unpublish = function(req, res) {
 exports.post_update = [
 
     body("title").trim().isLength({"min": 1}).escape(),
-    body("text").trim().isLength({"min": 1}).escape(),
+    body("text").trim().isLength({"min": 1}),
 
-    (req, res) => {
-
+    async (req, res) => {
         const errors = validationResult(req);
 
         if(!errors.isEmpty()){
-            return res.json(errors.array());
+            return res.send(errors.array());
+        }
+
+        //check if user is the same user who made the post
+        let validUser = await Post({"_id": req.params.id}).populate("user");
+        if(validUser.length > 0 && validUser[0].user !== req.authData._id){
+            return res.sendStatus(404);
         }
 
         else {
-
             let post = new Post({
                 title: req.body.title,
-                user: req.authData.user,
+                user: req.authData._id,
                 text: req.body.text, 
                 published: req.body.published,
                 _id: req.params.id,
             })
 
             Post.findByIdAndUpdate(req.params.id, post)
-            .populate("user")
-            .exec(function(err, results){
+            .exec(function(err){
                 if(err) {return res.json(err);}
-                return res.json(results);
+                return res.send(post);
             })
         }
     }

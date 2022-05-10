@@ -1,10 +1,6 @@
-// import React, { useEffect } from "react";
-// import { useState } from "react";
-import { NavLink } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-// import { useEffect } from "react";
 
 function Dashboard (props) {
     
@@ -71,15 +67,15 @@ function Dashboard (props) {
                         post.user._id === props.user.id && post.published
                         ).map((post) => (
                             <div className="post-card" key={post._id}>
-                                <NavLink 
-                                    id="post-nav"
-                                    exact to={'posts/post/' + post._id}
+                                <div 
+                                    id="card"
+                                    onClick={() => handleNavigate(post)}
                                 >
                                     <div className="post-card">
                                         <div id="title">{post.title}</div>
                                         <div id="created">{`By ${post.user.username} on ${moment(post.timestamp).format('llll')}`}</div>
                                     </div>
-                                </NavLink>
+                                </div>
                                 <button id="toggle-status" onClick={(e) => toggleStatus(e, post)}>Unpublish</button>
                             </div>
                         )
