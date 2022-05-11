@@ -10,3 +10,14 @@ body, html, #root{
   display: flex;
   flex-direction: column;
 }
+
+ul {
+  list-style-type: "\26A0";
+  color: red;
+  font-style: italic;
+  font-size: 0.75rem;
+}
+
+ul>* {
+  margin-left: 1rem;
+}

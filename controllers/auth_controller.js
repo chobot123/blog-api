@@ -5,6 +5,7 @@ var { body, validationResult } = require('express-validator');
 var bcrypt = require('bcryptjs');
 var passport = require('passport');
 var jwt = require('jsonwebtoken');
+const user = require('../models/user');
 
 //refresh token -- TESTED
 exports.refresh_token = async function(req, res) {
@@ -100,7 +101,7 @@ exports.login = function(req, res) {
         if(err || !user) {
 
             res.status(409).json({
-                message: "Username or Password is Incorrect",
+                msg: "Username and/or Password is Incorrect",
                 // user : user,
             });
             return;
@@ -159,28 +160,55 @@ exports.signup = [
     async (req, res) => {
 
         const errors = validationResult(req);
+        let userFound = await User.find({"username": req.body.username});
 
-        //if there are errors, resend a json with the sanitized values
-        if(!errors.isEmpty()){
-            console.log(`this error #1`)
-            return res.status(409).send({
-                error: {
+        // error validation
+        if(!errors.isEmpty() || userFound.length > 0) {
+
+            if(!errors.isEmpty() && userFound.length > 0) {
+                return res.status(409).send({
                     errors: errors.array(),
-                    username: req.body.username,
-                }
-            });
-        }
-        else {
-            //if username is taken return error msg
-            let userFound = await User.find({"username": req.body.username})
-            if(userFound.length > 0){
-                console.log(`this error #2`)
+                    error: {
+                        msg: "Username Already Exists"
+                    }
+                })
+            }
+            else if(!errors.isEmpty()) {
+                return res.status(409).send({
+                    errors: errors.array(),
+                });
+            }
+            else if(userFound.length > 0) {
                 return res.status(409).send({
                     error: {
                         msg: "Username Already Exists"
                     }
                 })
             }
+        }
+
+        // if(!errors.isEmpty()){
+        //     return res.status(408).send({
+        //         error: {
+        //             errors: errors.array(),
+        //             username: req.body.username,
+        //         }
+        //     });
+        // }
+
+        //if username is taken return error msg
+            // let userFound = await User.find({"username": req.body.username})
+            // if(userFound.length > 0){
+            //     console.log(`this error #2`)
+            //     return res.status(409).send({
+            //         error: {
+            //             msg: "Username Already Exists"
+            //         }
+            //     })
+            // }
+            
+        else {
+
             //make the user a hashed password
             bcrypt.hash(req.body.password, 10, (err, hashedpassword) => {
                 if(err) return next(err);

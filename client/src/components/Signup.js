@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import '../styles/Signup.css'
+import { NavLink, useNavigate } from "react-router-dom";
+import '../styles/userAuth.css'
 
 function Signup(){
 
@@ -26,29 +26,45 @@ function Signup(){
             return response.data;
         }
         catch(err){
-            console.log(err.response);
-            if(err.response.status === 401 || err.response.status === 409){
-                (err.response.data.errors) ? setError([...err.response.data.errors]) : setError([err.response.data.error]);
+            if(err.response.status === 409){
+                let allErrors = [];
+                for(let key in err.response.data) {
+                    if(Array.isArray(err.response.data[key])){
+                        allErrors = [...err.response.data[key]];
+                    }
+                    else {
+                        allErrors.push(err.response.data[key])
+                    }
+                }
+                setError(allErrors);
             }
-            else { console.log(err);}
+            else {
+                console.log(err);
+            }
         }
     }
 
+    useEffect(() => {
+        console.log(error);
+    }, [error])
+
     return (
         
-        <div className="signup-container">
+        <div className="auth-container">
             <div id="blog-name">Blog</div> 
-            <form className="signup-form" onSubmit={(e) => handleSubmit(e)}>
+            <form className="auth-form" onSubmit={(e) => handleSubmit(e)}>
                 <div id="form-title">Sign Up</div>
-                <ul className="error-list"></ul>
-                {
-                    error.map(function(err, index){
-                        return <li key={index} id="error">{err.msg}</li>
-                    })
-                }
+                <ul className="error-list" hidden={(error) ? false : true}>
+                    {
+                        error.map(function(err, index){
+                            return <li key={index} id="error">{err.msg}</li>
+                        })
+                    }
+                </ul>
                 <div className="form-body">
+
                     <div id="username container">
-                        <label htmlFor="username">Username:</label>
+                        <label htmlFor="username">Username</label>
                         <input type="text" 
                                id="username" 
                                name="username" 
@@ -58,7 +74,7 @@ function Signup(){
                     </div>
 
                     <div id="password container">
-                        <label htmlFor="password">Password:</label>
+                        <label htmlFor="password">Password</label>
                         <input type="text" 
                                id="password" 
                                name="password" 
@@ -68,7 +84,7 @@ function Signup(){
                     </div>
 
                     <div id="confirm-password container">
-                        <label htmlFor="confirm-password">Confirm Password:</label>
+                        <label htmlFor="confirm-password">Confirm Password</label>
                         <input type="text" 
                                id="confirm-password" 
                                name="confirm-password" 
@@ -79,7 +95,7 @@ function Signup(){
                 </div>
                 <div className="buttons">
                     <button id="submit-button" type="submit">Sign up</button>
-                    <a href="/" className="redirect-home">Home</a>
+                    <NavLink id="redirect-home"exact to="/">Home</NavLink>
                 </div>
                 
 
