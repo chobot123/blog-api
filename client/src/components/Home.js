@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import '../styles/home.css';
+import homeImg from "../images/homeimg.jpg"
 
 function Home(props) {
 
@@ -14,7 +16,14 @@ function Home(props) {
     return (
         <div className="home-page">
             <div className="page-description">
-
+                <div className="page-intro">
+                    <div id="blog-title">Mumblr</div>
+                    <p id="blog-description">
+                        Join other experts today as the thought leader in your industry as Mumblr helps you share and partake in the
+                        latest developments in tech, finance, and much more ALL across the globe.
+                    </p>
+                </div>
+                <img src={homeImg} alt="coffee-img" />
             </div>
             <div className="posts">
                 {props.posts.map((post) => 

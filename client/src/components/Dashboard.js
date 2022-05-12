@@ -1,6 +1,7 @@
 import moment from "moment";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import '../styles/dashboard.css'
 
 function Dashboard (props) {
     

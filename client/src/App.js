@@ -69,20 +69,20 @@ function App() {
     checkRefreshToken(); 
   }, [])
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   async function getPosts() {
-  //     await axios.get('http://localhost:4000/api/posts/')
-  //     .then((res) => {
-  //       setPosts(res.data)
-  //       setLoading(false);
-  //     })
-  //     .catch((err) => {console.log(err)})
-  //   }
+    async function getPosts() {
+      await axios.get('http://localhost:4000/api/posts/')
+      .then((res) => {
+        setPosts(res.data)
+        setLoading(false);
+      })
+      .catch((err) => {console.log(err)})
+    }
 
-  //   getPosts();
+    getPosts();
 
-  // }, [])
+  }, [])
 
   return (
       <div className='content'>

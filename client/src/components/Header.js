@@ -28,7 +28,7 @@ function Header(props){
                 id={"title"}
                 exact to="/"
             >
-            Blog
+            Mumblr
             </NavLink>
             <div className="navbar">
                 

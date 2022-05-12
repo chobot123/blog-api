@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import '../styles/create.css';
 
 function Create(props){
 
@@ -24,7 +25,7 @@ function Create(props){
             title: postTitle,
             text: postContent,
         })
-        .then(() => {
+        .then((res) => {
             navigate('/dashboard')
 
         })
@@ -35,12 +36,16 @@ function Create(props){
     }
 
     let handleClear = (e) => {
-        e.target.previousSibling.reset();
+
+        e.preventDefault();
+
+        e.target.parentElement.reset();
     }
+
     return (
-        <div className="Create">
+        <div className="create-container">
             <form className="create-post-form" onSubmit={(e) => handleCreate(e)}>
-                <div id="form-title">Create Blog Post</div>
+                <div id="form-title">Create Post</div>
                 <div className="form-body">
                     <div id="post-title">
                         <label htmlFor="title">Title:</label>
@@ -68,9 +73,11 @@ function Create(props){
                         />
                     </div>
                 </div>
-                <button type="submit" id="submit-button">Post</button>
+                <div className="buttons">
+                    <button type="submit" id="submit-button">Post</button>
+                    <button id="clear-content" onClick={(e) => handleClear(e)}>Clear</button>
+                </div>
             </form>
-            <button id="clear-content" onClick={(e) => handleClear(e)}>Clear</button>
         </div>
     )
 }

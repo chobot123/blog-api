@@ -44,7 +44,7 @@ function Login(props){
 
     return(
          <div className="auth-container">
-            <div id="blog-name">Blog</div> 
+            <div id="blog-name">Mumblr</div> 
             <form className="auth-form" onSubmit={(e) => handleSubmit(e)}>
                 <div id="form-title">Login</div>
                 <ul className="error-list" hidden={(error) ? false : true}>

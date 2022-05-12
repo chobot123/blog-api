@@ -1,0 +1,25 @@
+.home-page{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-description {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgb(225, 225, 225);
+}
+
+.page-intro {
+    margin-left: 2rem;
+}
+
+.page-intro>#blog-description {
+    font-size: 1rem;
+}
+
+#blog-title {
+    font-size: 4rem;
+}
+
+
