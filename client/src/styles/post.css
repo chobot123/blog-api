@@ -18,7 +18,6 @@
 }
 
 .update-post {
-    display: flex;
     justify-content: center;
     gap: 1rem;
 }
@@ -62,7 +61,6 @@
     background-size: contain;
     font-size: 1.7rem;
     flex: 1 1;
-    display: flex;
     justify-content: center;
     padding-top: 2%;
     color: #000;

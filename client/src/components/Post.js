@@ -58,7 +58,7 @@ function Post (props){
                     <div className="post-content">
                     <div id="title">{post.title}
                     <div id="published">By {post.user.username} on {moment(post.timestamp).format('llll')}</div>
-                        <div className="update-post" hidden={(props.user.id === post.user._id) ? false : true}>
+                        <div className="update-post" style={(props.user.id === post.user._id) ? {display: "flex"} : {display: "none"}}>
                             <button id="edit-button" onClick={(e) => handleUpdate(e)}>EDIT</button>
                             <button id="delete-button">DELETE</button>
                         </div>
@@ -71,7 +71,7 @@ function Post (props){
                 </div>
             }
             <div className="post-comments"> Comments:
-                <div id="no-comment" style={(comments.length>0) ? {visibility: "collapse"} : {visibility: "visible"}}>Be the First Comment!</div>
+                <div id="no-comment" style={(comments.length>0) ? {display: "none"} : {display: "flex"}}>Be the First Comment!</div>
                 <div className="comment-section">
                     {
                         comments.map((comment) => (
