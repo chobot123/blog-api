@@ -21,16 +21,17 @@ exports.comment_create = [
         const errors = validationResult(req);
         
         if(!errors.isEmpty()){
-            return res.send(errors.array());
+            return res.status(409).send(errors.array());
         }
-
         else {
+            console.log(req.params);
             let comment = new Comment({
                 username: req.body.username,
                 text: req.body.text,
                 post: req.params.post_id,
             })
 
+            console.log(comment);
             comment.save(function(err, thisComment){
                 if(err) {return res.send(err);}
                 console.log("Create Comment: " + thisComment);

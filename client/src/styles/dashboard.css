@@ -1,0 +1,92 @@
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    font-weight: bolder;
+    margin-left: 1rem;
+}
+
+.dashboard>#title {
+    font-size: 4rem;
+    font-family: 'Poppins', sans-serif;
+    align-self: center;
+    margin: 1rem;
+}
+
+.dashboard>.posts {
+    font-family: 'Poppins', sans-serif;
+    font-size: 3rem;
+    display: flex;
+    flex: 1;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+#empty-message{
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    background: url('../images/emptywork.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    font-size: 2rem;
+    padding-top: 4rem;
+}
+
+.cards{
+    font-size: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.cards>.post-card {
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Quicksand', sans-serif;
+    padding: 1rem;
+    background-color: rgb(255, 235, 235);
+    border: 1px solid rgb(255, 235, 235);
+    gap: 1rem;
+    border-radius: 8px;
+    flex: 1;
+    color: #39485b;
+    box-shadow: -1rem 1rem #babaee;
+}
+
+.cards>.post-card:hover{
+    animation: float 2s ease-in-out infinite;
+}
+
+.posts>#section-header {
+    padding: 2rem;
+}
+
+.cards{
+    font-size: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.post-info>#title {
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+#toggle-status {
+    background-color: #babaee;
+    border-radius: 12px;
+    border: 2px solid #babaee;
+    color: rgb(16, 50, 118);
+    padding: 0.5rem;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#toggle-status:hover{
+    background-color: #639bbd;
+    color: #39485b;
+}

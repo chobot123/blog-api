@@ -1,5 +1,5 @@
 var express = require('express');
-var router = express.Router();
+var router = express.Router({mergeParams: true});
 
 var comment_controller = require('../controllers/commentController');
 var verifyToken = require('../verifyToken');
@@ -10,7 +10,7 @@ var verifyToken = require('../verifyToken');
 router.get('/', comment_controller.comments);
 
 //POST -- CREATE A COMMENT
-router.post('/create', verifyToken, comment_controller.comment_create);
+router.post('/create', comment_controller.comment_create);
 
 //PUT -- UPDATE COMMENT
 router.put('/:id/edit', verifyToken, comment_controller.comment_update);

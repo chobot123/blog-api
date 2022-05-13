@@ -50,6 +50,7 @@ function App() {
         if(!token.data.user){
           setUser({
             accessToken: token.data.accessToken,
+            username: "",
             id: ""
           })
         }
@@ -83,6 +84,7 @@ function App() {
     getPosts();
 
   }, [])
+
 
   return (
       <div className='content'>

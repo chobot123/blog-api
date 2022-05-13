@@ -133,7 +133,10 @@ exports.login = function(req, res) {
 
             res.send({
                 accessToken,
-                user: {_id: user._id} 
+                user: {  
+                         username: user.username,
+                         _id: user._id
+                      } 
             });
 
         })

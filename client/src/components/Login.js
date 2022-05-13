@@ -24,6 +24,7 @@ function Login(props){
             props.setUser(
                 {
                     accessToken: res.data.accessToken,
+                    username: res.data.user.username,
                     id: res.data.user._id,
                 });
             navigate('/');

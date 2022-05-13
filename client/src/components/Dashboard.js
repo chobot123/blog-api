@@ -7,8 +7,11 @@ function Dashboard (props) {
     
     const navigate = useNavigate();
 
-    const handleNavigate = (post) => {
+    const handleNavigate = (e, post) => {
+        e.preventDefault();
 
+        console.log(e.target);
+        if(e.target.id === "toggle-status") {return}
         return navigate('/posts/' + post._id);
     }
     
@@ -64,45 +67,51 @@ function Dashboard (props) {
             <div className="posts published">
                 <div id="section-header">Published Posts</div>
                 {
-                    props.posts.filter((post) => 
-                        post.user._id === props.user.id && post.published
-                        ).map((post) => (
-                            <div className="post-card" key={post._id}>
-                                <div 
-                                    id="card"
-                                    onClick={() => handleNavigate(post)}
-                                >
-                                    <div className="post-card">
-                                        <div id="title">{post.title}</div>
-                                        <div id="created">{`By ${post.user.username} on ${moment(post.timestamp).format('llll')}`}</div>
+                    (props.posts.filter((post) => post.user._id === props.user.id && post.published)
+                        .length === 0) ? <div id="empty-message">No Published Posts Yet!</div> :
+                        <div className="cards">
+                            {props.posts.filter((post) => 
+                                post.user._id === props.user.id && post.published
+                                ).map((post) => (
+                                    <div className="post-card" key={post._id} onClick={(e) => handleNavigate(e, post)}>
+                                        <div 
+                                            id="card"
+                                        >
+                                            <div className="post-info">
+                                                <div id="title">{post.title}</div>
+                                                <div id="created">{moment(post.timestamp).format('llll')}</div>
+                                            </div>
+                                        </div>
+                                        <button id="toggle-status" onClick={(e) => toggleStatus(e, post)}>Unpublish</button>
                                     </div>
-                                </div>
-                                <button id="toggle-status" onClick={(e) => toggleStatus(e, post)}>Unpublish</button>
-                            </div>
-                        )
-                    )
-                }
+                                )
+                            )}
+                    </div>
+                }   
             </div>
             <div className="posts unpublished">
                 <div id="section-header">Unpublished Posts</div>
                 {
-                    props.posts.filter((post) => 
-                        post.user._id === props.user.id && !post.published
-                        ).map((post) => (
-                            <div className="post-card" key={post._id}>
-                                <div 
-                                    id="card"
-                                    onClick={() => handleNavigate(post)}
-                                >
-                                    <div className="post-card">
-                                        <div id="title">{post.title}</div>
-                                        <div id="created">{`By ${post.user.username} on ${moment(post.timestamp).format('llll')}`}</div>
+                    (props.posts.filter((post) => post.user._id === props.user.id && !post.published)
+                        .length === 0) ? <div id="empty-message">No Published Posts Yet!</div> :
+                        <div className="cards">
+                            {props.posts.filter((post) => 
+                                post.user._id === props.user.id && !post.published
+                                ).map((post) => (
+                                    <div className="post-card" key={post._id} onClick={(e) => handleNavigate(e, post)}>
+                                        <div 
+                                            id="card"
+                                        >
+                                            <div className="post-info">
+                                                <div id="title">{post.title}</div>
+                                                <div id="created">{moment(post.timestamp).format('llll')}</div>
+                                            </div>
+                                        </div>
+                                        <button id="toggle-status" onClick={(e) => toggleStatus(e, post)}>Publish</button>
                                     </div>
-                                </div>
-                                <button id="toggle-status" onClick={(e) => toggleStatus(e, post)}>Publish</button>
-                            </div>
-                        )
-                    )
+                                )
+                            )}
+                    </div>
                 }
             </div>
         </div>

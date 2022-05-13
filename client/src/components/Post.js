@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import axios from "axios";
 import Update from "./Update";
+import '../styles/post.css'
 
 function Post (props){
 
@@ -15,7 +16,6 @@ function Post (props){
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-
         axios.post(`http://localhost:4000/api/posts/${post._id}/comments/create`,
             {
                 headers: {
@@ -27,6 +27,7 @@ function Post (props){
             }
         )
         .then((res) => {
+            console.log(res.data);
             setComments(prev => [...prev, res.data])
         })
         .catch((err) => console.log(err))
@@ -49,6 +50,12 @@ function Post (props){
         .catch((err) => console.log(err))
     }, [post])
 
+    useEffect(() => {
+        console.log(comments);
+        let hidden = comments;
+        (hidden.length > 0) ? console.log(true) : console.log(false);
+    }, [comments])
+
     return (
         <div className="post-container">
             {(update) ? 
@@ -56,36 +63,17 @@ function Post (props){
                     :
                     <div className="post-content">
                     <div id="title">{post.title}
+                    <div id="published">By {post.user.username} on {moment(post.timestamp).format('llll')}</div>
                         <div className="update-post" hidden={(props.user.id === post.user._id) ? false : true}>
                             <button id="edit-button" onClick={(e) => handleUpdate(e)}>EDIT</button>
                             <button id="delete-button">DELETE</button>
                         </div>
                     </div>
-                    <div id="published">By {post.user.username} on {moment(post.timestamp).format('llll')}</div>
                     <div id="text" dangerouslySetInnerHTML={{__html: post.text}}/>
                 </div>
             }
-            <div className="post-comments"> Comments 
-                <form className="comment-form"
-                      onSubmit={(e) => handleFormSubmit(e)}        
-                >   
-                    <div className="user-info" hidden={(props.user)? true : false}>
-                        <label htmlFor="user">Username:</label>
-                        <input type="text"
-                               id="username" 
-                               name="username"
-                               onChange={(e) => setUsername(e.target.value)}
-                               required={(props.user) ? false : true}
-                        />
-                    </div>
-                    <textarea id="comment" 
-                              name="comment"
-                              onChange={(e) => setComment(e.target.value)}
-                              rows="5" 
-                              required
-                              placeholder="Write Your Comment Here..."/>                 
-                    <button type="submit">Comment</button>
-                </form>
+            <div className="post-comments"> Comments:
+                <div id="no-comment" style={(comments.length>0) ? {visibility: "collapse"} : {visibility: "visible"}}>Be the First Comment!</div>
                 <div className="comment-section">
                     {
                         comments.map((comment) => (
@@ -97,6 +85,27 @@ function Post (props){
                         ))
                     }
                 </div>
+                <form className="comment-form"
+                      onSubmit={(e) => handleFormSubmit(e)}        
+                >   
+                    <div className="user-info" hidden={(props.user.accessToken !== "")? true : false}>
+                        <label htmlFor="user">Username:</label>
+                        <input type="text"
+                               id="username" 
+                               name="username"
+                               onChange={(e) => setUsername(e.target.value)}
+                               required={(!props.user) ? true : false}
+                        />
+                    </div>
+                    <label htmkFor="comment">Comment: </label>
+                    <input    id="comment" 
+                              type="text"
+                              name="comment"
+                              onChange={(e) => setComment(e.target.value)}
+                              required
+                              placeholder="Write Your Comment Here..."/>                 
+                    <button id="submit-comment" type="submit">Send</button>
+                </form>
             </div>
         </div>
     )
