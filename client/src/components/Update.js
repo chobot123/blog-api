@@ -12,6 +12,7 @@ function Update(props){
     const navigate = useNavigate();
 
     const handleCancel = (e) => {
+        e.preventDefault();
         props.setUpdate(false);
     }
 
@@ -39,7 +40,7 @@ function Update(props){
     }
 
     return (
-        <div className="Update">
+        <div className="update">
             <form className="update-post-form" onSubmit={(e) => handleSubmit(e)}>
                 <div className="form-body">
                     <div id="post-title">
@@ -68,9 +69,12 @@ function Update(props){
                         />
                     </div>
                 </div>
-                <button type="submit" id="submit-button">Update</button>
+                <div className="buttons">
+                    <button type="submit" id="submit-button">Update</button>
+                    <button id="clear-content" onClick={(e) => handleCancel(e)}>Cancel</button>
+                </div>
+                
             </form>
-            <button id="clear-content" onClick={(e) => handleCancel(e)}>Cancel</button>
         </div>
     )
 }

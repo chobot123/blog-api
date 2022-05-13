@@ -118,3 +118,21 @@
 .comment-form>#submit-comment:hover {
     background-color: #576d89;
 }
+
+.update {
+    padding: 5%;
+}
+
+.update-post-form>.form-body>#post-title {
+    display: flex;
+    flex-direction: column;
+}
+
+.update-post-form>.buttons>* {
+    margin-right: 1rem;
+}
+
+.update-post-form>.form-body>*{
+    padding-bottom: 1rem;
+}
+

@@ -29,7 +29,7 @@
     gap: 1rem;
 }
 
-.create-post-form>.buttons>#clear-content{
+#clear-content{
     background-color: white;
     border: 1px solid black;
     color: black;
@@ -38,6 +38,6 @@
     border-radius: 8px;
 }
 
-.create-post-form>.buttons>#clear-content:hover{
+#clear-content:hover{
     background-color: grey;
 }

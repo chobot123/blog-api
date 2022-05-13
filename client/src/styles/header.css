@@ -47,13 +47,39 @@
     font-size: large;
 }
 
-.user-nav>.logout:hover {
-    transform: scale(1.1);
+.user-nav>.logout {
+    color: #346c8e;
+    background-color: beige;
 }
 
-.user-nav>#home:hover {
-    border-image-slice: 1;
-    border-width: 0.1rem;
-    border-image-source: linear-gradient(to left, #743ad5, #d53a9d);
-    
+.user-nav>.logout:hover {
+    color: #4794c4;
+    background-color: rgb(182, 182, 160);
+}
+
+.user-nav>*:hover:not(.logout) {
+    animation: headerAnim 2s ease-in-out alternate infinite;
+}
+
+@keyframes headerAnim {
+
+    0%{
+        border-top: 1px solid #6375bd;
+    }
+
+    25% {
+        border-top: 1px solid #346c8e;
+    }
+
+    50%{
+        border-right: 1px solid #b057aa;
+    }
+
+    75% {
+        border-bottom: 1px solid #8763bd;
+    }
+
+    100% {
+        border-left: 1px solid #6375bd;
+    }
 }
