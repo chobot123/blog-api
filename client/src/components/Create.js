@@ -26,6 +26,7 @@ function Create(props){
             text: postContent,
         })
         .then((res) => {
+            props.setPosts(prevState => [...prevState, res.data])
             navigate('/dashboard')
 
         })

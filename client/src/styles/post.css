@@ -91,8 +91,28 @@
     margin: 1rem;
 }
 
-#text {
+#text-container {
     line-height: 2rem;
+    border-top: 2px solid #000000;
+    margin: 1rem;
+    border-image: linear-gradient(to right, #b3ace1 5%, white 5%) 1;
+}
+
+#text-border-left {
+    border-left: 2px solid #000000;
+    border-image: linear-gradient(to bottom, #b3ace1 20%, white 20%) 1;
+}
+
+#text-border-right {
+    border-right: 2px solid #000000;
+    border-image: linear-gradient(to top, #b3ace1 20%, white 20%) 1;
+}
+
+#text-border-right>* {
+    border-bottom: 2px solid #000000;
+    border-image: linear-gradient(to left, #b3ace1 5%, white 5%) 1;
+    margin: 0;
+    padding: 1rem;
 }
 
 .comment-form {

@@ -83,7 +83,7 @@ function App() {
 
     getPosts();
 
-  }, [])
+  }, [posts.length])
 
 
   return (

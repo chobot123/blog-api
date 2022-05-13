@@ -10,7 +10,6 @@ function Dashboard (props) {
     const handleNavigate = (e, post) => {
         e.preventDefault();
 
-        console.log(e.target);
         if(e.target.id === "toggle-status") {return}
         return navigate('/posts/' + post._id);
     }

@@ -29,7 +29,7 @@ exports.post_get = function(req, res) {
 exports.post_create = [
     
     body("title").trim().isLength({min: 1}).withMessage("Please Enter a Title").escape(),
-    body("text").trim().isLength({min: 1}).withMessage("Please Enter Content").escape(),
+    body("text").trim().isLength({min: 1}).withMessage("Please Enter Content"),
     
     (req, res) => {
 

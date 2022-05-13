@@ -50,12 +50,6 @@ function Post (props){
         .catch((err) => console.log(err))
     }, [post])
 
-    useEffect(() => {
-        console.log(comments);
-        let hidden = comments;
-        (hidden.length > 0) ? console.log(true) : console.log(false);
-    }, [comments])
-
     return (
         <div className="post-container">
             {(update) ? 
@@ -69,7 +63,11 @@ function Post (props){
                             <button id="delete-button">DELETE</button>
                         </div>
                     </div>
-                    <div id="text" dangerouslySetInnerHTML={{__html: post.text}}/>
+                    <div id="text-container">
+                        <div id="text-border-left">
+                            <div id="text-border-right" dangerouslySetInnerHTML={{__html: post.text}}></div>
+                        </div>
+                    </div>
                 </div>
             }
             <div className="post-comments"> Comments:
