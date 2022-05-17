@@ -32,7 +32,7 @@ function Home(props) {
                         Chat away aimlessly on Mumblr today! Feel free to 
                         post whatever you want and let others chime in. 
                     </p>
-                    <button id="sign-up" onClick={(e) => handleNavigateSignup(e)} style={(props.user.username !== "") ? {display: "none"} : {display: "inline"}}>Signup Now! &rarr;</button>
+                    <button id="sign-up" onClick={(e) => handleNavigateSignup(e)} style={(props.user.username !== "") ? {display: "none"} : {display: "inline"}}>Join Today! &rarr;</button>
                 </div>
                 <img src={homeImg} alt="coffee-img" />
             </div>

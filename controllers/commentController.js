@@ -79,7 +79,7 @@ exports.comment_create = [
 
 exports.comment_update = [
 
-    body("text").trim().isLength({min: 1}).withMessage("Please Enter a Comment").escape(),
+    body("text").trim().isLength({min: 1}).withMessage("Please Enter a Comment"),
 
     (req, res) => {
         const errors = validationResult(req);
@@ -88,15 +88,21 @@ exports.comment_update = [
             return res.send(errors.array());
         }
 
+        //check if user is the same user who made the post
+        let validUser = await Comment.find({"_id": req.params.id});
+        if(validUser.username !== req.authData.username){
+            return res.sendStatus(404);
+        }
+
         else {
             let comment = new Comment({
-                user: res.locals.currentUser,
+                user: req.authData.username,
                 text: req.body.text,
                 post: req.params.post_id,
             })
 
-            Comment.findByIdAndUpdate(req.params.id, comment,
-                function(err, updatedComment){
+            Comment.findByIdAndUpdate(req.params.id, comment, {new: true})
+            .exec(function(err, updatedComment){
                     if(err) {return res.send(err);}
                     return res.send(updatedComment);
                 }

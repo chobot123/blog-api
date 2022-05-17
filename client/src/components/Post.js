@@ -20,8 +20,8 @@ function Post (props){
 
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
-    const [updatePost, setUpdatePost] = useState(false);
-    const [updateComment, setUpdateComment] = useState(false);
+    const [toggleUpdatePost, setToggleUpdatePost] = useState(false);
+    const [toggleUpdateComment, setToggleUpdateComment] = useState(false);
     const [post, setPost] = useState(props.post);
 
     const navigate = useNavigate();
@@ -57,7 +57,13 @@ function Post (props){
     const handleUpdatePost = (e) => {
         e.preventDefault();
 
-        setUpdatePost(true);
+        setToggleUpdatePost(true);
+    }
+
+    const handleUpdateComment = (e) => {
+        e.preventDefault();
+
+        setToggleUpdateComment(true);
     }
 
     const handleDeletePost = (e) => {
@@ -76,6 +82,7 @@ function Post (props){
 
     const handleDeleteComment = (e, id) => {
         e.preventDefault();
+        
         axios.delete(`http://localhost:4000/api/posts/${post._id}/comments/${id}/delete`,
         {
             withCredentials: true,
@@ -88,7 +95,7 @@ function Post (props){
         })
     }
 
-    
+    //Get all comments
     useEffect(() => {
 
         axios.get(`http://localhost:4000/api/posts/${post._id}/comments/`,
@@ -103,14 +110,14 @@ function Post (props){
 
     return (
         <div className="post-container">
-            {(updatePost) ? 
-                    <UpdatePost post={post} setPost={setPost} setUpdatePost={setUpdatePost} user={props.user}/> 
+            {(toggleUpdatePost) ? 
+                    <UpdatePost post={post} setPost={setPost} setToggleUpdatePost={setToggleUpdatePost} user={props.user}/> 
                     :
                     <div className="post-content">
                     <div id="title">{post.title}
                     <div id="published">By {post.user.username} on {moment(post.timestamp).format('llll')}
                     </div>
-                        <div className="update-post" style={(props.user.id === post.user._id) ? {display: "flex"} : {display: "none"}}>
+                        <div className="update-post-buttons" style={(props.user.id === post.user._id) ? {display: "flex"} : {display: "none"}}>
                             <button id="edit-button" onClick={(e) => handleUpdatePost(e)}>&#9997;</button>
                             <button id="delete-button" onClick={(e) => handleDeletePost(e)}>&#x1f5d1;</button>
                         </div>
@@ -127,13 +134,13 @@ function Post (props){
                 <div className="comment-section">
                     {
                         comments.map((comment) => (
-                            (updateComment) ? <UpdateComment comment={comment} /> :
+                            (toggleUpdateComment) ? <UpdateComment comment={comment} post={post} setPost={setPost} user={props.user} setUpdateComment={setToggleUpdateComment} updateComment={toggleUpdateComment}/> :
                             <div className="comment-card" key={comment._id}>
                                 <div className="comment-user">{comment.username}
                                     <div className="comment-buttons-container"
                                         style={(!props.user.username)? {display: 'none'} : {display: 'flex'}}
                                     >
-                                        <button id="edit-comment-button" >&#128393;</button>
+                                        <button id="edit-comment-button" onClick={(e) => handleUpdateComment(e)} >&#128393;</button>
                                         <button id="delete-comment-button" onClick={(e) => handleDeleteComment(e, comment._id)}>&#xd7;</button>
                                     </div>                                    
                                 </div>

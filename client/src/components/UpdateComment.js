@@ -1,5 +1,4 @@
-import React, { useRef, useState } from "react";
-import { Editor } from "@tinymce/tinymce-react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -12,28 +11,24 @@ import { useNavigate } from "react-router-dom";
  */
 function UpdateComment(props){
 
-    const [title, setTitle] = useState(props.post.title);
-    const [body, setBody] = useState(props.post.text);
-    const editorRef = useRef(null);
+    const [updateBody, setUpdateBody] = useState(props.post.text);
     const navigate = useNavigate();
 
     const handleCancel = (e) => {
         e.preventDefault();
-        props.setUpdate(false);
+        props.setToggleUpdate(false);
     }
 
     const handleSubmit = (e) => {
 
         e.preventDefault();
         //submit post data to server
-        axios.put('http://localhost:4000/api/posts/' + props.post._id + "/edit", {
+        axios.put(`http://localhost:4000/api/posts/${props.post._id}/comments/${props.comment._id}/edit`, {
             headers: {
                 "authorization": props.user.accessToken
             },
             withCredentials: true,
-            title: title,
-            text: body,
-            published: props.post.published,
+            text: updateBody,
         })
         /**
          * {
@@ -45,7 +40,7 @@ function UpdateComment(props){
             }
          */
         .then((res) => {
-            props.setUpdate(false);
+            props.setUpdateComment(false);
             props.setPost(res.data);
         })
         .catch(() => {
@@ -57,33 +52,16 @@ function UpdateComment(props){
     return (
         <div className="update">
             <form className="update-post-form" onSubmit={(e) => handleSubmit(e)}>
-                <div className="form-body">
-                    <div id="post-title">
-                        <label htmlFor="title">Title:</label>
-                        <input type="text" id="title" name="title" defaultValue={title} required onChange={(e) => setTitle(e.target.value)}/>
+            <div className="user-info" >
+                        <label htmlFor="comment">Comment: </label>
+                        <input      id="comment" 
+                                    type="text"
+                                    name="comment"
+                                    defaultValue={props.post.text}
+                                    onChange={(e) => setUpdateBody(e.target.value)}
+                                    required
+                        />             
                     </div>
-                    <div id="post-content">
-                        <label htmlFor="content">Content:</label>
-                        <Editor apiKey="odysb9itemhhioc0e9wswexnphs05fmqjao24y5ul5el42z5"
-                            onEditorChange={(e) => setBody(e)}
-                            onInit={(evt, editor) => editorRef.current = editor}
-                            name="content"
-                            id="content"
-                            required
-                            value={body}
-                            init={{
-                            height: 400,
-                            menubar: false,
-                            plugins: 'a11ychecker advcode casechange export formatpainter image editimage linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tableofcontents tinymcespellchecker',
-                            toolbar: 'undo redo | formatselect | ' +
-                            'bold italic backcolor | alignleft aligncenter ' +
-                            'alignright alignjustify | bullist numlist outdent indent | ' +
-                            'removeformat | help',
-                            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-                            }}
-                        />
-                    </div>
-                </div>
                 <div className="buttons">
                     <button type="submit" id="submit-button">Update</button>
                     <button id="clear-content" onClick={(e) => handleCancel(e)}>Cancel</button>
@@ -93,3 +71,5 @@ function UpdateComment(props){
         </div>
     )
 }
+
+export default UpdateComment;

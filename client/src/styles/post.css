@@ -158,17 +158,17 @@
     background-color: #576d89;
 }
 
-.update-post>*{
+.update-post-buttons>*{
     background-color: white;
     border: transparent;
     font-size: 75%;
 }
 
-.update-post>*:hover{
+.update-post-buttons>*:hover{
     transform: scale(1.1);
 }
 
-.update {
+.update-post-container {
     padding: 5%;
 }
 

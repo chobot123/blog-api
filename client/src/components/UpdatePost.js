@@ -12,14 +12,14 @@ import { useNavigate } from "react-router-dom";
  */
 function UpdatePost(props){
 
-    const [title, setTitle] = useState(props.post.title);
-    const [body, setBody] = useState(props.post.text);
+    const [updateTitle, setUpdateTitle] = useState(props.post.title);
+    const [updateBody, setUpdateBody] = useState(props.post.text);
     const editorRef = useRef(null);
     const navigate = useNavigate();
 
     const handleCancel = (e) => {
         e.preventDefault();
-        props.setUpdatePost(false);
+        props.setToggleUpdatePost(false);
     }
 
     const handleSubmit = (e) => {
@@ -31,9 +31,8 @@ function UpdatePost(props){
                 "authorization": props.user.accessToken
             },
             withCredentials: true,
-            title: title,
-            text: body,
-            published: props.post.published,
+            title: updateTitle,
+            text: updateBody,
         })
         /**
          * {
@@ -55,22 +54,22 @@ function UpdatePost(props){
     }
 
     return (
-        <div className="update">
+        <div className="update-post-container">
             <form className="update-post-form" onSubmit={(e) => handleSubmit(e)}>
                 <div className="form-body">
                     <div id="post-title">
                         <label htmlFor="title">Title:</label>
-                        <input type="text" id="title" name="title" defaultValue={title} required onChange={(e) => setTitle(e.target.value)}/>
+                        <input type="text" id="title" name="title" defaultValue={updateTitle} required onChange={(e) => setUpdateTitle(e.target.value)}/>
                     </div>
                     <div id="post-content">
                         <label htmlFor="content">Content:</label>
                         <Editor apiKey="odysb9itemhhioc0e9wswexnphs05fmqjao24y5ul5el42z5"
-                            onEditorChange={(e) => setBody(e)}
+                            onEditorChange={(e) => setUpdateBody(e)}
                             onInit={(evt, editor) => editorRef.current = editor}
                             name="content"
                             id="content"
                             required
-                            value={body}
+                            value={updateBody}
                             init={{
                             height: 400,
                             menubar: false,

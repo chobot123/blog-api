@@ -150,8 +150,8 @@ exports.post_update = [
         }
 
         //check if user is the same user who made the post
-        let validUser = await Post({"_id": req.params.id}).populate("user");
-        if(validUser.length > 0 && validUser[0].user !== req.authData._id){
+        let validUser = await Post.find({"_id": req.params.id}).populate("user");
+        if(validUser.user._id !== req.authData._id){
             return res.sendStatus(404);
         }
 
@@ -160,14 +160,12 @@ exports.post_update = [
                 title: req.body.title,
                 user: req.authData._id,
                 text: req.body.text, 
-                published: req.body.published,
-                _id: req.params.id,
             })
 
-            Post.findByIdAndUpdate(req.params.id, post)
-            .exec(function(err){
-                if(err) {return res.json(err);}
-                return res.send(post);
+            Post.findByIdAndUpdate(req.params.id, post, {new: true})
+            .exec(function(err, updatedPost){
+                if(err) {return res.send(err);}
+                return res.send(updatedPost);
             })
         }
     }
