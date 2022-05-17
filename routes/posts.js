@@ -1,11 +1,18 @@
 var express = require('express');
 var router = express.Router();
 var verifyToken = require('../verifyToken');
-
 var post_controller = require('../controllers/postController');
 var commentsRouter = require('../routes/comments');
 
-//GET -- ALL POSTS  //
+/**
+ * Routers to point to the designated controller and its respective middleware functions (CRUD)
+ * @param {String} '/...' The designated url (extending from '/api/posts)
+ * @param {Function} verifyToken The middleware function designed to verify the JWT --access token-- on request **OPTIONAL**
+ * @param {Function} post_controller.[...] The middleware function that either creates, reads, updates, or deletes in the post_controller
+ * @return {JSON} ... Returns whatever result from the middleware above (see controllers respository)
+ */
+
+//GET -- ALL POSTS  
 router.get('/', post_controller.posts);
 
 //GET -- SINGLE POST

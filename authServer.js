@@ -13,7 +13,6 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
 var User = require('./models/user');
 var cors = require('cors');
-// var commentsRouter = require('./routes/comments');
 var authRouter = require('./routes/auths');
 
 var auth = express();
@@ -56,13 +55,16 @@ passport.use(
           else {
             return done(null, false, { message: "Incorrect Password"})
           }
-        })
-      });
-    })
-  );
+        }
+      )
+    });
+  })
+);
 
+//routers
 auth.use('/api/auth', authRouter);
 
+//set up JWT
 passport.use(new JWTStrategy({
 
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),

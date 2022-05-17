@@ -1,6 +1,15 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+/**
+ * Creates a Mongoose Schema for the data structure of the document model for POSTS in the Database 
+ * @param {String} title Title of the post designated by the user
+ * @param {Date} timestamp The current date when the post is created
+ * @param {Schema} user The user who created the post
+ * @param {String} text The text body of the post
+ * @param {Boolean} published Designates if the post is published or not
+ */
+
 var PostSchema = new Schema({
 
     title: {
@@ -34,16 +43,16 @@ var PostSchema = new Schema({
                },
 })
 
-PostSchema
-.virtual('date')
-.get(function() {
-    return DateTime.fromJSDate(this.timestamp).toFormat('DDDD @ tt');
-})
+// PostSchema
+// .virtual('date')
+// .get(function() {
+//     return DateTime.fromJSDate(this.timestamp).toFormat('DDDD @ tt');
+// })
 
-PostSchema
-.virtual('url')
-.get(function(){
-    return '/post/' + this._id;
-})
+// PostSchema
+// .virtual('url')
+// .get(function(){
+//     return '/post/' + this._id;
+// })
 
 module.exports = mongoose.model("Post", PostSchema);

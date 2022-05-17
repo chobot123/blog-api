@@ -4,6 +4,13 @@ import { NavLink } from "react-router-dom";
 import "../styles/header.css";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * 
+ * @param {Object} props State that was passed down by App (user, setUser)
+ * 
+ * @returns Navigates to different routers and if the user logs out, redirects to home
+ */
+
 function Header(props){
 
     const navigate = useNavigate();
@@ -15,7 +22,7 @@ function Header(props){
         axios.delete('http://localhost:8080/api/auth/logout', {
             withCredentials: true,
         })
-        .then((res) => {
+        .then(() => {
             props.setUser({});
             navigate('/');
         })

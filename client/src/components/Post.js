@@ -1,20 +1,33 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import axios from "axios";
-import Update from "./Update";
+import UpdatePost from "./UpdatePost";
+import UpdateComment from "./UpdateComment";
 import '../styles/post.css'
-
+import { useNavigate } from "react-router-dom";
+/**
+ * 
+ * @param {Object} props State that was passed down by App (post, user, posts, setPosts)
+ * @state [comment, setComment]             Comment input
+ * @state [comments, setComments]           Comment list
+ * @state [username, setUsername]           Username
+ * @state [updatePost, setUpdatePost]       Toggle for user updating post
+ * @state [updateComment, setUpdateComment] Toggle for user updating comment
+ * @state [post, setPost]                   The post
+ * @returns user can create comment and see list of comments linked to post
+ */
 function Post (props){
 
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
-    const [update, setUpdate] = useState(false);
+    const [updatePost, setUpdatePost] = useState(false);
+    const [updateComment, setUpdateComment] = useState(false);
     const [post, setPost] = useState(props.post);
 
-    //CONSIDER CHANGING IF USER IS --NOT-- SIGNED IN
-    const [username, setUsername] = useState(props.user.username);
+    const navigate = useNavigate();
 
-    const handleFormSubmit = (e) => {
+    const handleCreateComment = (e) => {
+        
         e.preventDefault();
         axios.post(`http://localhost:4000/api/posts/${post._id}/comments/create`,
             {
@@ -23,21 +36,59 @@ function Post (props){
                 },
                 withCredentials: true,
                 text: comment,
-                username: username,
+                username: props.user.username,
             }
         )
+        /**
+         * {
+ *           username: req.body.username,
+ *           text: req.body.text,
+ *           post: req.params.post_id,
+ *           timestamp: Date.now(),
+ *       }
+         */
         .then((res) => {
-            console.log(res.data);
             setComments(prev => [...prev, res.data])
+            e.target.reset();
         })
         .catch((err) => console.log(err))
     }
 
-    const handleUpdate = (e) => {
+    const handleUpdatePost = (e) => {
         e.preventDefault();
-        setUpdate(true);
+
+        setUpdatePost(true);
     }
 
+    const handleDeletePost = (e) => {
+        e.preventDefault();
+
+            axios.delete(`http://localhost:4000/api/posts/${post._id}`, 
+            {
+                withCredentials: true,
+            })
+            .then(() => {
+                props.setPosts(prevState => (prevState.filter(thisPost => thisPost !== post)));
+                navigate('/dashboard')
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const handleDeleteComment = (e, id) => {
+        e.preventDefault();
+        axios.delete(`http://localhost:4000/api/posts/${post._id}/comments/${id}/delete`,
+        {
+            withCredentials: true,
+        })
+        .then(() => {
+            setComments(prevState => (prevState.filter(thisComment => thisComment._id !== id)))
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    }
+
+    
     useEffect(() => {
 
         axios.get(`http://localhost:4000/api/posts/${post._id}/comments/`,
@@ -52,15 +103,16 @@ function Post (props){
 
     return (
         <div className="post-container">
-            {(update) ? 
-                    <Update post={post} setPost={setPost} setUpdate={setUpdate} user={props.user}/> 
+            {(updatePost) ? 
+                    <UpdatePost post={post} setPost={setPost} setUpdatePost={setUpdatePost} user={props.user}/> 
                     :
                     <div className="post-content">
                     <div id="title">{post.title}
-                    <div id="published">By {post.user.username} on {moment(post.timestamp).format('llll')}</div>
+                    <div id="published">By {post.user.username} on {moment(post.timestamp).format('llll')}
+                    </div>
                         <div className="update-post" style={(props.user.id === post.user._id) ? {display: "flex"} : {display: "none"}}>
-                            <button id="edit-button" onClick={(e) => handleUpdate(e)}>EDIT</button>
-                            <button id="delete-button">DELETE</button>
+                            <button id="edit-button" onClick={(e) => handleUpdatePost(e)}>&#9997;</button>
+                            <button id="delete-button" onClick={(e) => handleDeletePost(e)}>&#x1f5d1;</button>
                         </div>
                     </div>
                     <div id="text-container">
@@ -75,8 +127,16 @@ function Post (props){
                 <div className="comment-section">
                     {
                         comments.map((comment) => (
+                            (updateComment) ? <UpdateComment comment={comment} /> :
                             <div className="comment-card" key={comment._id}>
-                                <div id="comment-user">{comment.username}</div>
+                                <div className="comment-user">{comment.username}
+                                    <div className="comment-buttons-container"
+                                        style={(!props.user.username)? {display: 'none'} : {display: 'flex'}}
+                                    >
+                                        <button id="edit-comment-button" >&#128393;</button>
+                                        <button id="delete-comment-button" onClick={(e) => handleDeleteComment(e, comment._id)}>&#xd7;</button>
+                                    </div>                                    
+                                </div>
                                 <div id="comment-body">{comment.text}</div>
                                 <div id="comment-published">{moment(comment.timestamp).format('llll')}</div>
                             </div>
@@ -84,24 +144,19 @@ function Post (props){
                     }
                 </div>
                 <form className="comment-form"
-                      onSubmit={(e) => handleFormSubmit(e)}        
-                >   
-                    <div className="user-info" hidden={(props.user.accessToken !== "")? true : false}>
-                        <label htmlFor="user">Username:</label>
-                        <input type="text"
-                               id="username" 
-                               name="username"
-                               onChange={(e) => setUsername(e.target.value)}
-                               required={(!props.user) ? true : false}
-                        />
+                      onSubmit={(e) => handleCreateComment(e)}        
+                      style={(!props.user.username)? {display: 'none'} : {display: 'flex'}}
+                >
+                    <div className="user-info" >
+                        <label htmlFor="comment">Comment: </label>
+                        <input      id="comment" 
+                                    type="text"
+                                    name="comment"
+                                    onChange={(e) => setComment(e.target.value)}
+                                    required
+                                    placeholder="Write Your Comment Here..."/>             
                     </div>
-                    <label htmkFor="comment">Comment: </label>
-                    <input    id="comment" 
-                              type="text"
-                              name="comment"
-                              onChange={(e) => setComment(e.target.value)}
-                              required
-                              placeholder="Write Your Comment Here..."/>                 
+                        
                     <button id="submit-comment" type="submit">Send</button>
                 </form>
             </div>

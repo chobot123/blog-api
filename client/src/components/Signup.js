@@ -1,13 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
 import '../styles/userAuth.css'
 
+/**
+ * 
+ * @param {Object} props State that was passed down by App (post, user)
+ * @state [username, setUsername]               Username
+ * @state [password, setPassword]               Password
+ * @state [confirmPassword, setConfirmPassword] Password confirmation
+ * @state [error, setError]                     Errors
+ * @returns user can create comment and see list of comments linked to post
+ */
 function Signup(){
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [confirmpassword, setConfirmPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState([]);
     const navigate = useNavigate();
 
@@ -19,7 +28,7 @@ function Signup(){
                 {
                     username: username,
                     password: password,
-                    confirmpassword: confirmpassword,
+                    confirmPassword: confirmPassword,
                 },
             );
             navigate('/login');
@@ -44,17 +53,13 @@ function Signup(){
         }
     }
 
-    useEffect(() => {
-        console.log(error);
-    }, [error])
-
     return (
         
         <div className="auth-container">
             <div id="blog-name">Mumblr</div> 
             <form className="auth-form" onSubmit={(e) => handleSubmit(e)}>
                 <div id="form-title">Sign Up</div>
-                <ul className="error-list" hidden={(error) ? false : true}>
+                <ul className="error-list" style={(error) ? {display: "initial"} : {display: "none"}}>
                     {
                         error.map(function(err, index){
                             return <li key={index} id="error">{err.msg}</li>

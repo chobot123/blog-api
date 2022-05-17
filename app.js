@@ -15,10 +15,13 @@ var bcrypt = require('bcryptjs');
 var User = require('./models/user');
 var cors = require('cors');
 
+
+//routers
 var postsRouter = require('./routes/posts');
 var usersRouter = require('./routes/users');
 var commentsRouter = require('./routes/comments');
 
+//CORS configuration
 var app = express();
 app.use(cors({
   origin: 'http://localhost:3000',
@@ -65,6 +68,7 @@ passport.use(
   })
 );
 
+//set up JWT 
 passport.use(new JWTStrategy({
 
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
@@ -94,12 +98,6 @@ app.use(passport.session());
 app.use('/api/posts', postsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/posts/:post_id/comments', commentsRouter);
-
-// //local user
-// app.use(function(req, res, next) {
-//   res.locals.currentUser = req.user;
-//   next();
-// })
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

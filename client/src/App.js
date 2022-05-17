@@ -10,15 +10,29 @@ import Post from './components/Post';
 import Signup from './components/Signup';
 import "./styles/App.css"
 
+/**
+ * 'Main' function that holds all routers to different pages
+ * 
+ * @state [user, setUser] Current user
+ * @state [posts, setPosts] All posts
+ * @state [loading, setLoading] 
+ * @returns <Header> with different 'body' routers (default '/' -> home)
+ */
 function App() {
 
-  //user => OBJ that's going to hold the access Token
   const [user, setUser] = useState("");
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  //Set credentials and headers (to send access and refresh tokens)
   axios.defaults.withCredentials = true;
   axios.defaults.headers.common['authorization'] = 'Bearer ' + user.accessToken;
+
+  /**
+   * Intercepts the 'verifyToken' middleware from server and if
+   * there is an error, verifies if there is a valid refresh token, and if so,
+   * updates parameters, and sends said parameters back with the original HTTP request
+   */
   axios.interceptors.response.use((response) => {
     return response;
   }, async (error) => {
@@ -41,7 +55,7 @@ function App() {
     }
   });
 
-  // first thing each mount is I want to check if there is a refresh token
+  // Verify refresh token and update state on mount
   useEffect(() => {
 
     async function checkRefreshToken() {
@@ -49,7 +63,7 @@ function App() {
       .then((token) => {
         if(!token.data.user){
           setUser({
-            accessToken: token.data.accessToken,
+            accessToken: "",
             username: "",
             id: ""
           })
@@ -68,8 +82,10 @@ function App() {
     }
 
     checkRefreshToken(); 
+
   }, [])
 
+  //update posts when posts changes
   useEffect(() => {
 
     async function getPosts() {
@@ -78,7 +94,9 @@ function App() {
         setPosts(res.data)
         setLoading(false);
       })
-      .catch((err) => {console.log(err)})
+      .catch((err) => {
+        console.log(err)
+      })
     }
 
     getPosts();
@@ -94,7 +112,7 @@ function App() {
               <Routes>
                 <Route
                   exact path='/'
-                  element={<Home posts={posts}/>}
+                  element={<Home user={user} posts={posts}/>}
                 >  
                 </Route>
                 <Route
@@ -117,11 +135,11 @@ function App() {
                   element={<Dashboard user={user} posts={posts} setPosts={setPosts}/>}
                 > 
                 </Route>
-                {posts.map((post) => 
+                {posts.length>0 && posts.map((post) => 
                     <Route
                         key={post._id}
                         exact path={'/posts/' + post._id}
-                        element={<Post post={post} user={user}/>}
+                        element={<Post post={post} user={user} posts={posts} setPosts={setPosts}/>}
                     >
                     </Route>
                   )

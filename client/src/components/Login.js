@@ -3,6 +3,14 @@ import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import '../styles/userAuth.css'
 
+/**
+ * 
+ * @param {Object} props State that was passed down by App (setUser)
+ * @state [username, setUsername]   username input
+ * @state [password, setPassword]   password input
+ * @state [error, setError]         error(s)
+ * @returns sets user state and navigates to home
+ */
 function Login(props){
 
     const [username, setUsername] = useState("");
@@ -19,8 +27,14 @@ function Login(props){
             password: password,
             withCredentials: true,
         })
+        /**
+         * accessToken,
+         * user: {
+         *          username: user.username,
+         *          _id: user._id,
+         * }
+         */
         .then((res) =>{
-            console.log(res);
             props.setUser(
                 {
                     accessToken: res.data.accessToken,
@@ -29,6 +43,9 @@ function Login(props){
                 });
             navigate('/');
         })
+        /**
+         * Either/and [errors], {error}
+         */
         .catch((err) => {
             
             if(err.response.status === 409){
@@ -48,7 +65,7 @@ function Login(props){
             <div id="blog-name">Mumblr</div> 
             <form className="auth-form" onSubmit={(e) => handleSubmit(e)}>
                 <div id="form-title">Login</div>
-                <ul className="error-list" hidden={(error) ? false : true}>
+                <ul className="error-list" style={(error) ? {display: "initial"} : {display: "none"}}>
                     <li id="error">{error.msg}</li>
                 </ul>
                 <div className="form-body">

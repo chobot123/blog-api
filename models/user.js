@@ -1,6 +1,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+/**
+ * Creates a Mongoose Schema for the data structure of the document model for USERS in the Database 
+ * @param {String} username The username designated by the user
+ * @param {String} password The password designated by the user
+ */
+
 var UserSchema = new Schema({
 
     username: {
@@ -17,10 +23,10 @@ var UserSchema = new Schema({
               },
 });
 
-UserSchema
-.virtual('url')
-.get(function(){
-    return '/user/' + this._id;
-})
+// UserSchema
+// .virtual('url')
+// .get(function(){
+//     return '/user/' + this._id;
+// })
 
 module.exports = mongoose.model('User', UserSchema);

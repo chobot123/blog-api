@@ -3,6 +3,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import '../styles/dashboard.css'
 
+/**
+ * 
+ * @param {Object} props State that was passed down by App (user, posts, setPosts)
+ * @returns Redirects to the post url on click, or publish/unpublish post
+ */
+
 function Dashboard (props) {
     
     const navigate = useNavigate();
@@ -10,10 +16,12 @@ function Dashboard (props) {
     const handleNavigate = (e, post) => {
         e.preventDefault();
 
+        //Disable going to post url if it is the toggle publish/unpublish button
         if(e.target.id === "toggle-status") {return}
         return navigate('/posts/' + post._id);
     }
     
+
     const updateStatus = (post, status) => {
 
         let posts = [...props.posts];
@@ -32,7 +40,7 @@ function Dashboard (props) {
         
         e.preventDefault();
 
-        //if the post isn't published -> publish, else vice versa
+        //if the post is unpublished -> publish, else vice versa
         if(!post.published){
             axios.post(`http://localhost:4000/api/posts/${post._id}/publish`, {
                 headers: {
@@ -40,6 +48,11 @@ function Dashboard (props) {
                 },
                 withCredentials: true,
             })
+            /**
+             * Receives res.data = {
+             *                          false/true 
+             *                      }
+             */
             .then((res) => {
                 updateStatus(post, res.data);
             })
@@ -53,6 +66,11 @@ function Dashboard (props) {
                     "authorization": props.user.accessToken
                 }
             })
+            /**
+             * Receives res.data = {
+             *                          false/true 
+             *                      }
+             */
             .then((res) => {
                 updateStatus(post, res.data);
             })
@@ -62,14 +80,14 @@ function Dashboard (props) {
 
     return(
         <div className="dashboard">
-            <div id="title">My Dashboard</div>
+            <div id="title">My Dashboard ({props.user.username})</div>
             <div className="posts published">
                 <div id="section-header">Published Posts</div>
                 {
-                    (props.posts.filter((post) => post.user._id === props.user.id && post.published)
+                    (props.posts.length>0 && props.posts.filter((post) => post.user._id === props.user.id && post.published)
                         .length === 0) ? <div id="empty-message">No Published Posts Yet!</div> :
                         <div className="cards">
-                            {props.posts.filter((post) => 
+                            {props.posts.length>0 && props.posts.filter((post) => 
                                 post.user._id === props.user.id && post.published
                                 ).map((post) => (
                                     <div className="post-card" key={post._id} onClick={(e) => handleNavigate(e, post)}>
@@ -91,10 +109,10 @@ function Dashboard (props) {
             <div className="posts unpublished">
                 <div id="section-header">Unpublished Posts</div>
                 {
-                    (props.posts.filter((post) => post.user._id === props.user.id && !post.published)
-                        .length === 0) ? <div id="empty-message">No Published Posts Yet!</div> :
+                    (props.posts.length>0 && props.posts.filter((post) => post.user._id === props.user.id && !post.published)
+                        .length === 0) ? <div id="empty-message">No Unpublished Posts Yet!</div> :
                         <div className="cards">
-                            {props.posts.filter((post) => 
+                            {props.posts.length>0 && props.posts.filter((post) => 
                                 post.user._id === props.user.id && !post.published
                                 ).map((post) => (
                                     <div className="post-card" key={post._id} onClick={(e) => handleNavigate(e, post)}>

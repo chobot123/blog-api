@@ -17,6 +17,11 @@
     border-bottom: 1px solid rgb(225, 225, 225);
     font-family: 'Quicksand', sans-serif;
     font-weight: bolder;
+    justify-content: space-between;
+}
+
+.page-description>img {
+    width: 50%;
 }
 
 .posts {
@@ -159,6 +164,32 @@
 
 .page-intro>#blog-description {
     font-size: 1rem;
+}
+
+#sign-up {
+    background-color: #39485b;
+    padding: 2%;
+    font-size: 1.25rem;
+    color: white;
+    border: 1px solid #39485b;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    border-radius: 4px;
+    margin-top: 0;
+}
+
+#sign-up:hover {
+    animation: moveRight 0.5s linear;
+    animation-fill-mode: forwards;
+}
+
+@keyframes moveRight {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(0.5rem);
+    }
 }
 
 

@@ -1,10 +1,16 @@
 require('dotenv').config();
 var Post = require('../models/post');
+var Comment = require('../models/comment')
 const { body, validationResult } = require('express-validator');
-var jwt = require('jsonwebtoken');
 
+/**
+ * Get all posts
+ * 
+ * @param {Object} req                  The HTTP request with properties for the request query [string, parameters, body, headers, etc.]
+ * @param {Object} res                  The HTTP response that the Express app sends when it gets an HTTP request
+ * @returns {JSON} posts                The JSON object list of all posts
+ */
 
-//get all posts, sorted (recent => latest)
 exports.posts = function(req, res) {
     Post.find()
     .sort({"timestamp": "descending"})
@@ -15,7 +21,15 @@ exports.posts = function(req, res) {
     })
 }
 
-//get one post
+/**
+ * Get a specific post
+ * 
+ * @param {req.body.text} text          sanitized and validated req
+ * @param {Object} req                  The HTTP request with properties for the request query [string, parameters, body, headers, etc.]
+ * @param {Object} res                  The HTTP response that the Express app sends when it gets an HTTP request
+ * @returns {JSON} post                 The JSON object of the requested post
+ */
+
 exports.post_get = function(req, res) {
     Post.findById(req.params.id)
     .populate("user")
@@ -25,7 +39,16 @@ exports.post_get = function(req, res) {
     })
 }
 
-//create post -- TESTED
+/**
+ * Create a post
+ * 
+ * @param {req.body.title} title        sanitized and validated req
+ * @param {req.body.text} text          sanitized and validated req
+ * @param {Object} req                  The HTTP request with properties for the request query [string, parameters, body, headers, etc.]
+ * @param {Object} res                  The HTTP response that the Express app sends when it gets an HTTP request
+ * @returns {JSON} thisPost             The JSON object of the created post
+ */
+
 exports.post_create = [
     
     body("title").trim().isLength({min: 1}).withMessage("Please Enter a Title").escape(),
@@ -41,7 +64,7 @@ exports.post_create = [
         }
 
         else {
-
+                
             let post = new Post({
                 title: req.body.title,
                 user: req.authData._id,
@@ -56,7 +79,14 @@ exports.post_create = [
     }
 ];
 
-//publish post -- TESTED
+/**
+ * Publish a post
+ * 
+ * @param {Object} req                      The HTTP request with properties for the request query [string, parameters, body, headers, etc.]
+ * @param {Object} res                      The HTTP response that the Express app sends when it gets an HTTP request
+ * @returns {JSON} !results.published       Since the query returns the 'old' post, we return the opposite status
+ */
+
 exports.post_publish = function(req, res) {
 
     Post.findByIdAndUpdate(req.params.id, {"published": true})
@@ -70,7 +100,14 @@ exports.post_publish = function(req, res) {
     })
 }
 
-//unpublish post -- TESTED
+/**
+ * Unpublish a post
+ * 
+ * @param {Object} req                      The HTTP request with properties for the request query [string, parameters, body, headers, etc.]
+ * @param {Object} res                      The HTTP response that the Express app sends when it gets an HTTP request
+ * @returns {JSON} !results.published       Since the query returns the 'old' post, we return the opposite status
+ */
+
 exports.post_unpublish = function(req, res) {
 
     Post.findByIdAndUpdate(req.params.id, {"published": false})
@@ -83,7 +120,23 @@ exports.post_unpublish = function(req, res) {
     })
 }
 
-//update post
+/**
+ * Update a post
+ * 
+ * @param {req.body.title} title            sanitized and validated req
+ * @param {req.body.text} text              sanitized and validated req
+ * @param {Object} req                      The HTTP request with properties for the request query [string, parameters, body, headers, etc.]
+ * @param {Object} res                      The HTTP response that the Express app sends when it gets an HTTP request
+ * @returns {JSON} post                     Since the query returns the 'old' post, we return the opposite status
+ *                  |{
+ *                  |    title: req.body.title,
+                    |    user: req.authData._id,
+                    |    text: req.body.text, 
+                    |    published: req.body.published,
+                    |    _id: req.params.id,
+                    |}
+ */
+
 exports.post_update = [
 
     body("title").trim().isLength({"min": 1}).escape(),
@@ -121,10 +174,20 @@ exports.post_update = [
 
 ]
 
-//delete post
+/**
+ * Delete a post
+ * 
+ * @param {Object} req                      The HTTP request with properties for the request query [string, parameters, body, headers, etc.]
+ * @param {Object} res                      The HTTP response that the Express app sends when it gets an HTTP request
+ * @returns {JSON} '...'                    JSON string confirming deletion
+ */
+
 exports.post_delete = function(req, res) {
-    Post.findByIdAndDelete(req.params.id, function(err){
+    Post.findByIdAndDelete(req.params.id, async function(err){
         if(err) {return res.json(err);}
-        return res.json("Post Deleted Successfully");
+        Comment.findOneAndDelete({post: req.params.id}, function(err){
+            if(err) {return res.status(409).send('Failed to Delete post comments')}
+        })
+        return res.send("Post Deleted Successfully");
     })
 }

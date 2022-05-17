@@ -1,10 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-
-function Update(props){
+/**
+ * 
+ * @param {Object} props State that was passed down by App (post, setPost, setUpdatePost, user)
+ * @state [title, setTitle]               Username
+ * @state [body, setBody]                 Password
+ * @returns Updated post 
+ */
+function UpdatePost(props){
 
     const [title, setTitle] = useState(props.post.title);
     const [body, setBody] = useState(props.post.text);
@@ -13,7 +19,7 @@ function Update(props){
 
     const handleCancel = (e) => {
         e.preventDefault();
-        props.setUpdate(false);
+        props.setUpdatePost(false);
     }
 
     const handleSubmit = (e) => {
@@ -29,8 +35,17 @@ function Update(props){
             text: body,
             published: props.post.published,
         })
+        /**
+         * {
+ *             title: req.body.title,
+               user: req.authData._id,
+               text: req.body.text, 
+               published: req.body.published,
+               _id: req.params.id,
+            }
+         */
         .then((res) => {
-            props.setUpdate(false);
+            props.setUpdatePost(false);
             props.setPost(res.data);
         })
         .catch(() => {
@@ -79,4 +94,4 @@ function Update(props){
     )
 }
 
-export default Update;
+export default UpdatePost;
