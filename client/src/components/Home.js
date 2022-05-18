@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import '../styles/home.css';
@@ -32,7 +32,7 @@ function Home(props) {
                         Chat away aimlessly on Mumblr today! Feel free to 
                         post whatever you want and let others chime in. 
                     </p>
-                    <button id="sign-up" onClick={(e) => handleNavigateSignup(e)} style={(props.user.username !== "") ? {display: "none"} : {display: "inline"}}>Join Today! &rarr;</button>
+                    <button id="sign-up" onClick={(e) => handleNavigateSignup(e)} style={(props.user.accessToken) ? {display: "none"} : {display: "inline"}}>Join Today! &rarr;</button>
                 </div>
                 <img src={homeImg} alt="coffee-img" />
             </div>

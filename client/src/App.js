@@ -101,11 +101,23 @@ function App() {
 
   }, [posts.length])
 
+  useEffect(() => {
+    console.log(user);
+  }, [user])
+
+  //-------- SET HANDLERS --------//
+  const setPostsHandler = (value) => {
+    setPosts(prevState => [...prevState, value]);
+  }
+
+  const setUserHandler = (value) => {
+    setUser(value);
+  }
 
   return (
       <div className='content'>
             <Router>
-              <Header user={user} setUser={setUser}/>
+              <Header user={user} setUser={setUserHandler}/>
               <Routes>
                 <Route
                   exact path='/'
@@ -119,24 +131,24 @@ function App() {
                 </Route>
                 <Route
                   exact path='/login'
-                  element={<Login setUser={setUser}/>}
+                  element={<Login setUser={setUserHandler}/>}
                 > 
                 </Route>
                 <Route
                   exact path='/create'
-                  element={<Create user={user} posts={posts} setPosts={setPosts}/>}
+                  element={<Create user={user} posts={posts} setPosts={setPostsHandler}/>}
                 > 
                 </Route>
                 <Route
                   exact path='/dashboard'
-                  element={<Dashboard user={user} posts={posts} setPosts={setPosts}/>}
+                  element={<Dashboard user={user} posts={posts} setPosts={setPostsHandler}/>}
                 > 
                 </Route>
                 {posts.length>0 && posts.map((post) => 
                     <Route
                         key={post._id}
                         exact path={'/posts/' + post._id}
-                        element={<Post post={post} user={user} posts={posts} setPosts={setPosts}/>}
+                        element={<Post post={post} user={user} posts={posts} setPosts={setPostsHandler}/>}
                     >
                     </Route>
                   )

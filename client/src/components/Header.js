@@ -23,7 +23,7 @@ function Header(props){
             withCredentials: true,
         })
         .then(() => {
-            props.setUser({});
+            props.setUser("");
             navigate('/');
         })
         .catch((err) => {console.log(err)})

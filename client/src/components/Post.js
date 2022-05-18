@@ -55,6 +55,7 @@ function Post (props){
     }
 
     //------------HANDLE UPDATES------------//
+
     const handleUpdatePost = (e) => {
         e.preventDefault();
         setToggleUpdatePost(true);
@@ -67,6 +68,7 @@ function Post (props){
     }
 
     //------------HANDLE DELETES------------//
+
     const handleDeletePost = (e) => {
         e.preventDefault();
 
@@ -96,6 +98,32 @@ function Post (props){
         })
     }
 
+    //Get all Comments (and update when a comment is updated/deleted)
+    useEffect(() => {
+        axios.get(`http://localhost:4000/api/posts/${post._id}/comments/`,
+        {
+            withCredentials: true,
+        })
+        .then((response) => {
+            setComments(response.data);
+        })
+        .catch((err) => console.log(err))
+    }, [post._id, toggleUpdateComment])
+
+    //Get Post (and update when the post is updated)
+    useEffect(() => {
+        axios.get(`http://localhost:4000/api/posts/${post._id}`,
+        {
+            withCredentials: true,
+        })
+        .then((response) => {
+            setPost(response.data);
+        })
+        .catch((err) => console.log(err))
+    }, [post._id, toggleUpdatePost])
+
+    //---------- SET HANDLERS ----------//
+
     const handleToggle = (type, value) => {
         if(type === "comment"){
             setToggleUpdateComment(value);
@@ -108,30 +136,6 @@ function Post (props){
     const postSetter = (value) => {
         setPost(value);
     }
-
-    //Get all Comments 
-    useEffect(() => {
-        axios.get(`http://localhost:4000/api/posts/${post._id}/comments/`,
-        {
-            withCredentials: true,
-        })
-        .then((response) => {
-            setComments(response.data);
-        })
-        .catch((err) => console.log(err))
-    }, [post._id, toggleUpdateComment])
-
-    //Get Post w/ any updates, if any
-    useEffect(() => {
-        axios.get(`http://localhost:4000/api/posts/${post._id}`,
-        {
-            withCredentials: true,
-        })
-        .then((response) => {
-            setPost(response.data);
-        })
-        .catch((err) => console.log(err))
-    }, [post._id, toggleUpdatePost])
 
     return (
         <div className="post-container">
