@@ -21,7 +21,7 @@ function Post (props){
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
     const [toggleUpdatePost, setToggleUpdatePost] = useState(false);
-    const [toggleUpdateComment, setToggleUpdateComment] = useState(false);
+    const [toggleUpdateComment, setToggleUpdateComment] = useState("");
     const [post, setPost] = useState(props.post);
 
     const navigate = useNavigate();
@@ -54,18 +54,19 @@ function Post (props){
         .catch((err) => console.log(err))
     }
 
+    //------------HANDLE UPDATES------------//
     const handleUpdatePost = (e) => {
         e.preventDefault();
-
         setToggleUpdatePost(true);
     }
 
-    const handleUpdateComment = (e) => {
+    const handleUpdateComment = (e, id) => {
         e.preventDefault();
 
-        setToggleUpdateComment(true);
+        setToggleUpdateComment(id);
     }
 
+    //------------HANDLE DELETES------------//
     const handleDeletePost = (e) => {
         e.preventDefault();
 
@@ -79,7 +80,7 @@ function Post (props){
             })
             .catch((err) => console.log(err))
     }
-
+    
     const handleDeleteComment = (e, id) => {
         e.preventDefault();
         
@@ -95,9 +96,21 @@ function Post (props){
         })
     }
 
-    //Get all comments
-    useEffect(() => {
+    const handleToggle = (type, value) => {
+        if(type === "comment"){
+            setToggleUpdateComment(value);
+        }
+        else if(type === "post") {
+            setToggleUpdatePost(value);
+        }
+    }
 
+    const postSetter = (value) => {
+        setPost(value);
+    }
+
+    //Get all Comments 
+    useEffect(() => {
         axios.get(`http://localhost:4000/api/posts/${post._id}/comments/`,
         {
             withCredentials: true,
@@ -106,12 +119,24 @@ function Post (props){
             setComments(response.data);
         })
         .catch((err) => console.log(err))
-    }, [post])
+    }, [post._id, toggleUpdateComment])
+
+    //Get Post w/ any updates, if any
+    useEffect(() => {
+        axios.get(`http://localhost:4000/api/posts/${post._id}`,
+        {
+            withCredentials: true,
+        })
+        .then((response) => {
+            setPost(response.data);
+        })
+        .catch((err) => console.log(err))
+    }, [post._id, toggleUpdatePost])
 
     return (
         <div className="post-container">
             {(toggleUpdatePost) ? 
-                    <UpdatePost post={post} setPost={setPost} setToggleUpdatePost={setToggleUpdatePost} user={props.user}/> 
+                    <UpdatePost post={post} setPost={postSetter} handleToggle={handleToggle} user={props.user}/> 
                     :
                     <div className="post-content">
                     <div id="title">{post.title}
@@ -134,13 +159,14 @@ function Post (props){
                 <div className="comment-section">
                     {
                         comments.map((comment) => (
-                            (toggleUpdateComment) ? <UpdateComment comment={comment} post={post} setPost={setPost} user={props.user} setUpdateComment={setToggleUpdateComment} updateComment={toggleUpdateComment}/> :
+                            (toggleUpdateComment === comment._id) ? <UpdateComment comment={comment} post={post} 
+                                                                        user={props.user} handleToggle={handleToggle}/> :
                             <div className="comment-card" key={comment._id}>
                                 <div className="comment-user">{comment.username}
                                     <div className="comment-buttons-container"
                                         style={(!props.user.username)? {display: 'none'} : {display: 'flex'}}
                                     >
-                                        <button id="edit-comment-button" onClick={(e) => handleUpdateComment(e)} >&#128393;</button>
+                                        <button id="edit-comment-button" onClick={(e) => handleUpdateComment(e, comment._id)} >&#128393;</button>
                                         <button id="delete-comment-button" onClick={(e) => handleDeleteComment(e, comment._id)}>&#xd7;</button>
                                     </div>                                    
                                 </div>

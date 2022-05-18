@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 /**
  * 
@@ -15,18 +14,17 @@ function UpdatePost(props){
     const [updateTitle, setUpdateTitle] = useState(props.post.title);
     const [updateBody, setUpdateBody] = useState(props.post.text);
     const editorRef = useRef(null);
-    const navigate = useNavigate();
 
     const handleCancel = (e) => {
         e.preventDefault();
-        props.setToggleUpdatePost(false);
+        props.handleToggle("post", false);
     }
 
     const handleSubmit = (e) => {
 
         e.preventDefault();
         //submit post data to server
-        axios.put('http://localhost:4000/api/posts/' + props.post._id + "/edit", {
+        axios.put(`http://localhost:4000/api/posts/${props.post._id}/edit`, {
             headers: {
                 "authorization": props.user.accessToken
             },
@@ -44,11 +42,11 @@ function UpdatePost(props){
             }
          */
         .then((res) => {
-            props.setUpdatePost(false);
             props.setPost(res.data);
+            props.handleToggle("post", false);
         })
-        .catch(() => {
-            navigate('/');
+        .catch((err) => {
+            console.log(err);
         })
 
     }

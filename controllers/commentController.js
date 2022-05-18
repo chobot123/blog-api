@@ -79,31 +79,35 @@ exports.comment_create = [
 
 exports.comment_update = [
 
-    body("text").trim().isLength({min: 1}).withMessage("Please Enter a Comment"),
+    body("text").trim().isLength({min: 1}).withMessage("Please Enter a Comment").escape(),
 
-    (req, res) => {
+    async (req, res) => {
         const errors = validationResult(req);
         
         if(!errors.isEmpty()){
             return res.send(errors.array());
         }
-
         //check if user is the same user who made the post
-        let validUser = await Comment.find({"_id": req.params.id});
+        let validUser = await Comment.findOne({"_id": req.params.id});
         if(validUser.username !== req.authData.username){
             return res.sendStatus(404);
         }
 
         else {
-            let comment = new Comment({
-                user: req.authData.username,
-                text: req.body.text,
-                post: req.params.post_id,
-            })
 
-            Comment.findByIdAndUpdate(req.params.id, comment, {new: true})
+            Comment.findByIdAndUpdate(      req.params.id, 
+                                        {
+                                            text: req.body.text
+                                        }, 
+                                        {
+                                            new: true
+                                        }
+            )
             .exec(function(err, updatedComment){
-                    if(err) {return res.send(err);}
+                    if(err) {
+                            console.log(err);
+                            return res.send(err);
+                    }
                     return res.send(updatedComment);
                 }
             )
@@ -120,7 +124,7 @@ exports.comment_update = [
  */
 
 exports.comment_delete = function(req, res) {
-    Comment.findByIdAndDelete(req.params.id, function(err, deletedComment){
+    Comment.findByIdAndDelete(req.params.id, function(err){
         if(err) {return res.send(err);}
         return res.json("This Comment Has Been Deleted");
     })

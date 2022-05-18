@@ -4,19 +4,18 @@ import { useNavigate } from "react-router-dom";
 
 /**
  * 
- * @param {Object} props State that was passed down by App (post, setPost, setUpdate, user)
- * @state [title, setTitle]               Username
- * @state [body, setBody]               Password
- * @returns Updated post 
+ * @param {Object} props State that was passed down by App (comment, post, user, handleToggle)
+ * @state [updateBody, setUpdateBody]               Text to be updated
+ * @returns Updated comment 
  */
 function UpdateComment(props){
 
-    const [updateBody, setUpdateBody] = useState(props.post.text);
+    const [updateBody, setUpdateBody] = useState(props.comment.text);
     const navigate = useNavigate();
 
     const handleCancel = (e) => {
         e.preventDefault();
-        props.setToggleUpdate(false);
+        props.handleToggle("comment", "");
     }
 
     const handleSubmit = (e) => {
@@ -39,9 +38,8 @@ function UpdateComment(props){
                _id: req.params.id,
             }
          */
-        .then((res) => {
-            props.setUpdateComment(false);
-            props.setPost(res.data);
+        .then(() => {
+            props.handleToggle("comment", "");
         })
         .catch(() => {
             navigate('/');
@@ -57,7 +55,7 @@ function UpdateComment(props){
                         <input      id="comment" 
                                     type="text"
                                     name="comment"
-                                    defaultValue={props.post.text}
+                                    defaultValue={updateBody}
                                     onChange={(e) => setUpdateBody(e.target.value)}
                                     required
                         />             

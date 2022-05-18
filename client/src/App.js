@@ -22,7 +22,6 @@ function App() {
 
   const [user, setUser] = useState("");
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   //Set credentials and headers (to send access and refresh tokens)
   axios.defaults.withCredentials = true;
@@ -92,7 +91,6 @@ function App() {
       await axios.get('http://localhost:4000/api/posts/')
       .then((res) => {
         setPosts(res.data)
-        setLoading(false);
       })
       .catch((err) => {
         console.log(err)
@@ -106,7 +104,6 @@ function App() {
 
   return (
       <div className='content'>
-        { (loading) ? <div>Loading...</div> :
             <Router>
               <Header user={user} setUser={setUser}/>
               <Routes>
@@ -146,7 +143,6 @@ function App() {
                 }
               </Routes>
             </Router>
-        }
       </div>
   );
 }

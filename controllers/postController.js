@@ -34,8 +34,8 @@ exports.post_get = function(req, res) {
     Post.findById(req.params.id)
     .populate("user")
     .exec(function(err, post){
-        if(err) {return res.json(err);}
-        return res.json(post);
+        if(err) {return res.send(err);}
+        return res.send(post);
     })
 }
 
@@ -150,21 +150,31 @@ exports.post_update = [
         }
 
         //check if user is the same user who made the post
-        let validUser = await Post.find({"_id": req.params.id}).populate("user");
-        if(validUser.user._id !== req.authData._id){
+        let validUser = await Post.findOne({"_id": req.params.id}).populate("user");
+        if(validUser.user.id !== req.authData._id){
             return res.sendStatus(404);
         }
 
         else {
-            let post = new Post({
-                title: req.body.title,
-                user: req.authData._id,
-                text: req.body.text, 
-            })
 
-            Post.findByIdAndUpdate(req.params.id, post, {new: true})
+
+            Post.findByIdAndUpdate(     req.params.id, 
+                                    {   
+                                        title: req.body.title,
+                                        text: req.body.text, 
+                                    }, 
+                                    {
+                                        new: true
+                                    }
+            )
             .exec(function(err, updatedPost){
-                if(err) {return res.send(err);}
+                if(err) {
+                    console.log(`test#2`);
+                    console.log(err);
+                    return res.send(err);
+                }
+                console.log(`test#3`);
+                console.log(updatedPost);
                 return res.send(updatedPost);
             })
         }
