@@ -21,6 +21,14 @@ function Create(props){
 
     const editorRef = useRef(null);
 
+    //helper function for updating posts after creation
+    const updatePosts = (data) => {
+
+        let posts = [...props.posts];
+        posts.push(data);
+        props.setPosts(posts);
+    }
+
     //HTTP request 
     let handleCreate = (e) => {
 
@@ -45,7 +53,7 @@ function Create(props){
          *                      }
          */
         .then((res) => {
-            props.setPosts(prevState => [...prevState, res.data])
+            updatePosts(res.data);
             navigate('/dashboard')
 
         })

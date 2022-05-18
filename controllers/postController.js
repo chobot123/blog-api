@@ -73,7 +73,7 @@ exports.post_create = [
 
             post.save(function(err, thisPost){
                 if(err) {return res.json(err);}
-                return res.json(thisPost);
+                return res.send(thisPost);
             })
         }
     }
@@ -169,12 +169,8 @@ exports.post_update = [
             )
             .exec(function(err, updatedPost){
                 if(err) {
-                    console.log(`test#2`);
-                    console.log(err);
                     return res.send(err);
                 }
-                console.log(`test#3`);
-                console.log(updatedPost);
                 return res.send(updatedPost);
             })
         }

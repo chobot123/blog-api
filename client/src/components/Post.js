@@ -8,12 +8,11 @@ import { useNavigate } from "react-router-dom";
 /**
  * 
  * @param {Object} props State that was passed down by App (post, user, posts, setPosts)
- * @state [comment, setComment]             Comment input
- * @state [comments, setComments]           Comment list
- * @state [username, setUsername]           Username
- * @state [updatePost, setUpdatePost]       Toggle for user updating post
- * @state [updateComment, setUpdateComment] Toggle for user updating comment
- * @state [post, setPost]                   The post
+ * @state [comment, setComment]                         Comment input
+ * @state [comments, setComments]                       Comment list
+ * @state [toggleUpdatePost, setToggleUpdatePost]       Toggle for user updating post
+ * @state [toggleUpdateComment, setToggleUpdateComment] Toggle for user updating comment
+ * @state [post, setPost]                               The post
  * @returns user can create comment and see list of comments linked to post
  */
 function Post (props){
@@ -69,6 +68,12 @@ function Post (props){
 
     //------------HANDLE DELETES------------//
 
+    //helper function for updating posts after deletion 
+    const updatePosts = () => {
+        let posts = [...props.posts].filter((currentPost) => currentPost._id !== post._id);
+        props.setPosts(posts);
+    }
+
     const handleDeletePost = (e) => {
         e.preventDefault();
 
@@ -77,7 +82,7 @@ function Post (props){
                 withCredentials: true,
             })
             .then(() => {
-                props.setPosts(prevState => (prevState.filter(thisPost => thisPost !== post)));
+                updatePosts();
                 navigate('/dashboard')
             })
             .catch((err) => console.log(err))
@@ -139,6 +144,7 @@ function Post (props){
 
     return (
         <div className="post-container">
+
             {(toggleUpdatePost) ? 
                     <UpdatePost post={post} setPost={postSetter} handleToggle={handleToggle} user={props.user}/> 
                     :
@@ -158,6 +164,7 @@ function Post (props){
                     </div>
                 </div>
             }
+
             <div className="post-comments"> Comments:
                 <div id="no-comment" style={(comments.length>0) ? {display: "none"} : {display: "flex"}}>Be the First Comment!</div>
                 <div className="comment-section">
@@ -168,7 +175,7 @@ function Post (props){
                             <div className="comment-card" key={comment._id}>
                                 <div className="comment-user">{comment.username}
                                     <div className="comment-buttons-container"
-                                        style={(!props.user.username)? {display: 'none'} : {display: 'flex'}}
+                                        style={(props.user.username !== comment.username)? {display: 'none'} : {display: 'flex'}}
                                     >
                                         <button id="edit-comment-button" onClick={(e) => handleUpdateComment(e, comment._id)} >&#128393;</button>
                                         <button id="delete-comment-button" onClick={(e) => handleDeleteComment(e, comment._id)}>&#xd7;</button>

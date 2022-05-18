@@ -14,7 +14,6 @@ exports.comments = function(req, res) {
     .sort({"timestamp": "descending"})
     .exec(function(err, comments){
         if(err) {return res.status(409).send(err);}
-        console.log(comments);
         return res.send(comments);
     })
 }
@@ -105,7 +104,6 @@ exports.comment_update = [
             )
             .exec(function(err, updatedComment){
                     if(err) {
-                            console.log(err);
                             return res.send(err);
                     }
                     return res.send(updatedComment);

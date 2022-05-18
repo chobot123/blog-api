@@ -4,7 +4,7 @@ import axios from "axios";
 
 /**
  * 
- * @param {Object} props State that was passed down by App (post, setPost, setUpdatePost, user)
+ * @param {Object} props State that was passed down by App (post, setPost, handleToggle, user)
  * @state [title, setTitle]               Username
  * @state [body, setBody]                 Password
  * @returns Updated post 

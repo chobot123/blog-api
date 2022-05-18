@@ -21,7 +21,7 @@ function Dashboard (props) {
         return navigate('/posts/' + post._id);
     }
     
-
+    //update the selected post's published status for the posts state
     const updateStatus = (post, status) => {
 
         let posts = [...props.posts];
@@ -31,7 +31,6 @@ function Dashboard (props) {
             }
             return oldPost;
         })
-
         props.setPosts(posts);
     }
 
@@ -54,6 +53,7 @@ function Dashboard (props) {
              *                      }
              */
             .then((res) => {
+                
                 updateStatus(post, res.data);
             })
             .catch((err) => console.log(err))
@@ -78,13 +78,15 @@ function Dashboard (props) {
         }
     }
 
+
     return(
         <div className="dashboard">
             <div id="title">My Dashboard ({props.user.username})</div>
             <div className="posts published">
                 <div id="section-header">Published Posts</div>
                 {
-                    (props.posts.length>0 && props.posts.filter((post) => post.user._id === props.user.id && post.published)
+                    (props.posts.length>0 && props.posts.filter((post) => {
+                                    return post.user._id === props.user.id && post.published})
                         .length === 0) ? <div id="empty-message">No Published Posts Yet!</div> :
                         <div className="cards">
                             {props.posts.length>0 && props.posts.filter((post) => 

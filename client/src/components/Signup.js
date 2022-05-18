@@ -5,7 +5,6 @@ import '../styles/userAuth.css'
 
 /**
  * 
- * @param {Object} props State that was passed down by App (post, user)
  * @state [username, setUsername]               Username
  * @state [password, setPassword]               Password
  * @state [confirmPassword, setConfirmPassword] Password confirmation

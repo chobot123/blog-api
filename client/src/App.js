@@ -101,13 +101,9 @@ function App() {
 
   }, [posts.length])
 
-  useEffect(() => {
-    console.log(user);
-  }, [user])
-
   //-------- SET HANDLERS --------//
   const setPostsHandler = (value) => {
-    setPosts(prevState => [...prevState, value]);
+    setPosts(value);
   }
 
   const setUserHandler = (value) => {
@@ -148,7 +144,7 @@ function App() {
                     <Route
                         key={post._id}
                         exact path={'/posts/' + post._id}
-                        element={<Post post={post} user={user} posts={posts} setPosts={setPostsHandler}/>}
+                        element={<Post post={post} user={user} posts={posts} setPosts={setPosts}/>}
                     >
                     </Route>
                   )
