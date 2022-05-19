@@ -25,7 +25,6 @@ var authRouter = require('./routes/auths');
 //CORS configuration
 var app = express();
 app.use(cors({
-  origin: 'http://localhost:3000' || `http://localhost:${process.env.PORT}`,
   credentials: true,
 },
 ));
