@@ -169,10 +169,10 @@ function Post (props){
                 <div id="no-comment" style={(comments.length>0) ? {display: "none"} : {display: "flex"}}>Be the First Comment!</div>
                 <div className="comment-section">
                     {
-                        comments.map((comment) => (
+                        comments.map((comment, index) => (
                             (toggleUpdateComment === comment._id) ? <UpdateComment comment={comment} post={post} 
                                                                         user={props.user} handleToggle={handleToggle}/> :
-                            <div className="comment-card" key={comment._id}>
+                            <div className={(index % 2 === 0) ? "comment-card start" : "comment-card end"} key={comment._id}>
                                 <div className="comment-user">{comment.username}
                                     <div className="comment-buttons-container"
                                         style={(props.user.username !== comment.username)? {display: 'none'} : {display: 'flex'}}

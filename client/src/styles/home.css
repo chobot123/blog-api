@@ -1,5 +1,15 @@
+@media only screen and (max-width: 380px ){
 
-@media screen and (max-width: 600px){
+    .card>#title {
+        font-size: 2rem !important;
+    }
+
+    .card>#user {
+        font-size: 0.75rem !important;
+    }
+}
+
+@media only screen and (max-width: 600px){
     img {
         display: none;
     }
@@ -49,8 +59,7 @@
 }
 
 .posts>.post-card{
-    display: flex;
-    flex: 1;    
+    display: flex;  
 }
 
 .card{

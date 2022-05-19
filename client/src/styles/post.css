@@ -28,7 +28,7 @@
 .post-comments {
     display: flex;
     flex-direction: column;
-    flex: 1;
+    flex: 1 0 400px;
     width: 100%;
     font-size: 2rem;
     padding-bottom: 1rem;
@@ -56,6 +56,7 @@
     background-color: rgb(255, 235, 235);
     box-shadow: 1rem 1rem #babaee;
     margin: 1rem;
+    width: 70%;
 }
 
 #no-comment {
@@ -118,6 +119,7 @@
 }
 
 #text-container {
+    text-align: center;
     line-height: 2rem;
     border-top: 2px solid #000000;
     margin: 1rem;
@@ -192,4 +194,13 @@
 
 .update-post-form>.form-body>*{
     padding-bottom: 1rem;
+}
+
+.start {
+    align-self: flex-start;
+}
+
+.end {
+    align-self: flex-end;
+    box-shadow: -1rem 1rem #babaee !important;
 }
