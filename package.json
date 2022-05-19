@@ -1,12 +1,16 @@
 {
   "name": "blog-api",
   "version": "0.0.0",
+  "engines": {
+    "node": "16.14.2"
+  },
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
     "devStart": "nodemon ./bin/www",
     "devAuthStart": "nodemon ./bin/wwwAuth",
-    "serverstart": "DEBUG=blog-api:* & npm start"
+    "serverstart": "DEBUG=blog-api:* & npm start",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
