@@ -263,7 +263,7 @@ exports.signup = [
 //----- HELPER FUNCTIONS TO GENERATE AN ACCESS TOKEN AND REFRESH TOKEN ------//
 
 function generateAccessToken(user) {
-  return jwt.sign({_id: user._id, username: user.username}, process.env.JWT_SECRET_KEY, { expiresIn: '1h' })
+  return jwt.sign({_id: user._id, username: user.username}, process.env.JWT_SECRET_KEY, { expiresIn: '15m' })
 }
 
 function generateRefreshToken(user) {

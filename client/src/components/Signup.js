@@ -79,7 +79,7 @@ function Signup(){
 
                     <div id="password container">
                         <label htmlFor="password">Password</label>
-                        <input type="text" 
+                        <input type="password" 
                                id="password" 
                                name="password" 
                                onChange={(e) => setPassword(e.target.value)}
@@ -89,7 +89,7 @@ function Signup(){
 
                     <div id="confirm-password container">
                         <label htmlFor="confirm-password">Confirm Password</label>
-                        <input type="text" 
+                        <input type="password" 
                                id="confirm-password" 
                                name="confirm-password" 
                                onChange={(e) => setConfirmPassword(e.target.value)}

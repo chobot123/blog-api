@@ -28,47 +28,6 @@ ul>* {
 }
 
 .active:not(#title){
-    border-top: 1px solid #6375bd;
-    border-right: 1px solid #b057aa;
-    border-bottom: 1px solid #8763bd;
-    border-left: 1px solid #2e3d77;
-    animation: rotateColors 2s ease-in-out alternate infinite;
-}
-
-@keyframes rotateColors {
-  0% {
-    border-top: 1px solid #6375bd;
-    border-right: 1px solid #b057aa;
-    border-bottom: 1px solid #8763bd;
-    border-left: 1px solid #5788ae;
-  }
-
-  25% {
-    border-top-color: #5788ae;
-    border-right-color: #6375bd;
-    border-bottom-color: #b057aa;
-    border-left-color: #8763bd;
-  }
-
-  50% {
-    border-top-color: #8763bd;
-    border-right-color: #5788ae;
-    border-bottom-color: #6375bd;
-    border-left-color: #b057aa;
-  }
-
-  75% {
-    border-top-color: #b057aa;
-    border-right-color: #8763bd;
-    border-bottom-color: #5788ae;
-    border-left-color: #6375bd;
-  }
-
-  100% {
-    border-top-color: #6375bd;
-    border-right-color: #b057aa;
-    border-bottom-color: #8763bd;
-    border-left-color: #5788ae;
-  }
-
+    animation: none;
+    background: linear-gradient(130deg, #7c88b8, #728fa3);
 }

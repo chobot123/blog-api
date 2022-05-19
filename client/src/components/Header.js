@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import "../styles/header.css";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 function Header(props){
 
+    const [toggleNav, setToggleNav] = useState(false);
     const navigate = useNavigate();
 
     let handleLogout = (e) => {
@@ -29,26 +30,37 @@ function Header(props){
         .catch((err) => {console.log(err)})
     }
 
+    const handleToggle = () => {
+        return (toggleNav) ? setToggleNav(false) : setToggleNav(true);
+    }
+
     return (
         <div className="header">
-            <NavLink
-                id={"title"}
-                exact to="/"
-            >
-            Mumblr
-            </NavLink>
-            <div className="navbar">
-                
+            <div className="header-container">
+                <NavLink
+                    id={"title"}
+                    exact to="/"
+                >
+                    Mumblr
+                </NavLink>
+                <div className="toggle-nav" onClick={() => handleToggle()}>
+                    <span className="line"></span>
+                    <span className="line"></span>
+                    <span className="line"></span>
+                </div>
+            </div>
+            
+            <div className={`navbar`}>
                 {   //if there is no user accessToken
                     (!props.user.accessToken) ? 
-                                    <div className="user-nav create">
+                                    <div className={`user-nav ${(toggleNav) ? "toggle" : ""}`}>
                                         <NavLink id="login" exact to="/login">Login</NavLink>
                                         <NavLink id="signup" exact to="/signup">Signup</NavLink>
                                     </div>
 
                                     :
 
-                                    <div className="user-nav">
+                                    <div className={`user-nav ${(toggleNav) ? "toggle" : ""}`}>
                                         <NavLink id="home" exact to="/">Home</NavLink>
                                         <NavLink id="dashboard" exact to="/dashboard">Dashboard</NavLink>
                                         <NavLink className="create" exact to="/create">Create Post</NavLink>

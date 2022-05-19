@@ -1,4 +1,22 @@
 
+@media screen and (max-width: 600px){
+    img {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    .page-description {
+        padding-bottom: 20px;
+    }
+  }
+
+.body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
 .home-page{
     flex: 1;
     display: flex;

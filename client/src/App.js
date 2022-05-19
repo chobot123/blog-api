@@ -13,15 +13,17 @@ import "./styles/App.css"
 /**
  * 'Main' function that holds all routers to different pages
  * 
- * @state [user, setUser] Current user
- * @state [posts, setPosts] All posts
- * @state [loading, setLoading] 
+ * @state [user, setUser]             Current user
+ * @state [posts, setPosts]           All posts
+ * @state [bodyHeight, setBodyHeight] Height of Body
  * @returns <Header> with different 'body' routers (default '/' -> home)
  */
 function App() {
 
   const [user, setUser] = useState("");
   const [posts, setPosts] = useState([]);
+
+  const [bodyHeight, setBodyHeight] = useState(0);
 
   //Set credentials and headers (to send access and refresh tokens)
   axios.defaults.withCredentials = true;
@@ -101,6 +103,17 @@ function App() {
 
   }, [posts.length])
 
+  //Give margin-top to body based on the size of the header
+  useEffect(() => {
+
+  const getBodyMargin = () => {
+    const headerHeight = document.getElementById("title").clientHeight + 50;
+    return headerHeight;
+  }
+
+  setBodyHeight(getBodyMargin());
+  }, [])
+
   //-------- SET HANDLERS --------//
   const setPostsHandler = (value) => {
     setPosts(value);
@@ -114,42 +127,44 @@ function App() {
       <div className='content'>
             <Router>
               <Header user={user} setUser={setUserHandler}/>
-              <Routes>
-                <Route
-                  exact path='/'
-                  element={<Home user={user} posts={posts}/>}
-                >  
-                </Route>
-                <Route
-                  exact path='/signup'
-                  element={<Signup />}
-                >
-                </Route>
-                <Route
-                  exact path='/login'
-                  element={<Login setUser={setUserHandler}/>}
-                > 
-                </Route>
-                <Route
-                  exact path='/create'
-                  element={<Create user={user} posts={posts} setPosts={setPostsHandler}/>}
-                > 
-                </Route>
-                <Route
-                  exact path='/dashboard'
-                  element={<Dashboard user={user} posts={posts} setPosts={setPostsHandler}/>}
-                > 
-                </Route>
-                {posts.length>0 && posts.map((post) => 
-                    <Route
-                        key={post._id}
-                        exact path={'/posts/' + post._id}
-                        element={<Post post={post} user={user} posts={posts} setPosts={setPosts}/>}
-                    >
-                    </Route>
-                  )
-                }
-              </Routes>
+              <div className='body' style={{marginTop: bodyHeight}}>
+                  <Routes>
+                  <Route
+                    exact path='/'
+                    element={<Home user={user} posts={posts}/>}
+                  >  
+                  </Route>
+                  <Route
+                    exact path='/signup'
+                    element={<Signup />}
+                  >
+                  </Route>
+                  <Route
+                    exact path='/login'
+                    element={<Login setUser={setUserHandler}/>}
+                  > 
+                  </Route>
+                  <Route
+                    exact path='/create'
+                    element={<Create user={user} posts={posts} setPosts={setPostsHandler}/>}
+                  > 
+                  </Route>
+                  <Route
+                    exact path='/dashboard'
+                    element={<Dashboard user={user} posts={posts} setPosts={setPostsHandler}/>}
+                  > 
+                  </Route>
+                  {posts.length>0 && posts.map((post) => 
+                      <Route
+                          key={post._id}
+                          exact path={'/posts/' + post._id}
+                          element={<Post post={post} user={user} posts={posts} setPosts={setPosts}/>}
+                      >
+                      </Route>
+                    )
+                  }
+                </Routes>
+              </div>           
             </Router>
       </div>
   );

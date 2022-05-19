@@ -1,18 +1,61 @@
+@media only screen and (min-width: 769px) {
+
+    .header, .user-nav {
+        flex-direction: row !important;
+    }
+    .toggle-nav {
+        display: none !important;
+    }
+    .user-nav{
+        display: flex !important;
+        margin-right: 20px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+
+    .user-nav {
+        max-height: 0px;
+        overflow-y: hidden;
+        transition: max-height 200ms ease-in-out;
+    }
+
+    .user-nav.toggle {
+        max-height: 188px;
+    }
+
+}
+
 .header { 
     display: flex;
     justify-content: space-between;
-    align-items: center;
     color: white;
     background-color: #39485b;
-    padding: 0.5rem;
+    flex-direction: column;
+    position: absolute;
+    width: 100%;
+    z-index: 1;
 }
 
-.header>#title {
+.header-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.header-container>* {
     text-decoration: none;
     color: white;
+    font-size: xx-large;
+    padding: 10px;
 }
 
-.header>#title::before{
+.header-container>#title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-container>#title::before{
     content: "M";
     border: 1px solid white;
     padding: 0.1rem 0.6rem;
@@ -21,19 +64,43 @@
     font-family: 'Oleo Script Swash Caps', cursive;
 }
 
-.navbar {
+.toggle-nav {
     display: flex;
-    justify-content: space-evenly;
+    align-self: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #495c75;
+    border-radius: 4px;
+    margin-right: 0.6rem;
+}
+
+.toggle-nav>.line {
+    height: 3px;
+    width: 30px;
+    background-color: #6375bd;
+    display: block;
+}
+
+.toggle-nav> .line+.line {
+    margin-top: 5px;
+}
+
+.navbar{
+    display: flex;
+    justify-content: center;
     align-items: center;
 }
 
-.user-nav.create>*{
-    color: white;
+.user-nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-.header>#title {
-    font-size: xx-large;
-    padding: 10px;
+.user-nav>*{
+    color: white;
 }
 
 .user-nav>*{
@@ -41,10 +108,10 @@
     padding: 5px;
     text-decoration: none;
     color: white;
-    border: 2px solid transparent;
     border-radius: 24px;
     transition: ease-in-out;
     font-size: large;
+    border: 1px solid transparent;
 }
 
 .user-nav>.logout {
