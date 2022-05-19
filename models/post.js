@@ -43,16 +43,4 @@ var PostSchema = new Schema({
                },
 })
 
-// PostSchema
-// .virtual('date')
-// .get(function() {
-//     return DateTime.fromJSDate(this.timestamp).toFormat('DDDD @ tt');
-// })
-
-// PostSchema
-// .virtual('url')
-// .get(function(){
-//     return '/post/' + this._id;
-// })
-
 module.exports = mongoose.model("Post", PostSchema);

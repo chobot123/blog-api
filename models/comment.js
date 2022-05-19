@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-const { DateTime } = require('luxon');
 var Schema = mongoose.Schema;
 
 /**
@@ -37,10 +36,5 @@ var CommentSchema = new Schema({
                }
 });
 
-// CommentSchema
-// .virtual('date')
-// .get(function(){
-//       return DateTime.fromJSDate(this.timestamp).toFormat('yyyy-mm-dd @ hh:mm');
-// })    
 
 module.exports = mongoose.model("Comment", CommentSchema);
