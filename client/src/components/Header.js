@@ -25,6 +25,7 @@ function Header(props){
         })
         .then(() => {
             props.setUser("");
+            setToggleNav(prevState => !prevState);
             navigate('/');
         })
         .catch((err) => {console.log(err)})
@@ -54,16 +55,16 @@ function Header(props){
                 {   //if there is no user accessToken
                     (!props.user.accessToken) ? 
                                     <div className={`user-nav ${(toggleNav) ? "toggle" : ""}`}>
-                                        <NavLink id="login" exact to="/login">Login</NavLink>
-                                        <NavLink id="signup" exact to="/signup">Signup</NavLink>
+                                        <NavLink id="login" exact to="/login" onClick={() => handleToggle()}>Login</NavLink>
+                                        <NavLink id="signup" exact to="/signup" onClick={() => handleToggle()}>Signup</NavLink>
                                     </div>
 
                                     :
 
                                     <div className={`user-nav ${(toggleNav) ? "toggle" : ""}`}>
-                                        <NavLink id="home" exact to="/">Home</NavLink>
-                                        <NavLink id="dashboard" exact to="/dashboard">Dashboard</NavLink>
-                                        <NavLink className="create" exact to="/create">Create Post</NavLink>
+                                        <NavLink id="home" exact to="/" onClick={() => handleToggle()}>Home</NavLink>
+                                        <NavLink id="dashboard" exact to="/dashboard" onClick={() => handleToggle()}>Dashboard</NavLink>
+                                        <NavLink className="create" exact to="/create" onClick={() => handleToggle()}>Create Post</NavLink>
                                         <button className="logout" onClick={(e) => handleLogout(e)}>Logout</button>
                                     </div>
 
