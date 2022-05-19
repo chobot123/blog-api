@@ -20,11 +20,12 @@ var cors = require('cors');
 var postsRouter = require('./routes/posts');
 var usersRouter = require('./routes/users');
 var commentsRouter = require('./routes/comments');
+var authRouter = require('./routes/auths');
 
 //CORS configuration
 var app = express();
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:3000' || `http://localhost:${process.env.PORT}`,
   credentials: true,
 },
 ));
@@ -38,13 +39,11 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.resolve(__dirname, '/client/build')))
+app.use(express.static(path.join(__dirname, './client/build')));
 
 //set up localstrategy
 passport.use(
@@ -96,9 +95,15 @@ app.use(session({secret: 'cats', resave: false, saveUninitialized: false}));
 app.use(passport.initialize());
 app.use(passport.session());
 
+//routers
 app.use('/api/posts', postsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/posts/:post_id/comments', commentsRouter);
+app.use('/api/auth', authRouter);
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './client/build/index.html'))
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

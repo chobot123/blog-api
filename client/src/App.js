@@ -39,7 +39,7 @@ function App() {
   }, async (error) => {
     const originalRequest = error.config;
     if(error.response.status === 401) {
-      return  await axios.post('http://localhost:8080/api/auth/refresh_token')
+      return  await axios.post('/api/auth/refresh_token')
               .then((res) => {
                 if(res.status === 200) {
                   setUser({
@@ -60,7 +60,7 @@ function App() {
   useEffect(() => {
 
     async function checkRefreshToken() {
-      await axios.post('http://localhost:8080/api/auth/refresh_token')
+      await axios.post('/api/auth/refresh_token')
       .then((token) => {
         if(!token.data.user){
           setUser({
@@ -90,7 +90,7 @@ function App() {
   useEffect(() => {
 
     async function getPosts() {
-      await axios.get('http://localhost:4000/api/posts/')
+      await axios.get('/api/posts/')
       .then((res) => {
         setPosts(res.data)
       })

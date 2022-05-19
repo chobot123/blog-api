@@ -35,7 +35,7 @@ function Create(props){
         e.preventDefault();
 
         //submit post data to server
-        axios.post('http://localhost:4000/api/posts/', {
+        axios.post('/api/posts/', {
             headers: {
                 "authorization": props.user.accessToken
             },

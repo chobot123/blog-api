@@ -21,7 +21,7 @@ function Login(props){
     let handleSubmit =  async (e) => {
         e.preventDefault();
 
-        await axios.post('http://localhost:8080/api/auth/login', 
+        await axios.post('/api/auth/login', 
         {
             username: username,
             password: password,

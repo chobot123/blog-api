@@ -8,7 +8,6 @@
   "scripts": {
     "start": "node ./bin/www",
     "devStart": "nodemon ./bin/www",
-    "devAuthStart": "nodemon ./bin/wwwAuth",
     "serverstart": "DEBUG=blog-api:* & npm start",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },

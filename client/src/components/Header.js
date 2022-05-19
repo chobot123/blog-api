@@ -20,7 +20,7 @@ function Header(props){
 
         e.preventDefault();
         
-        axios.delete('http://localhost:8080/api/auth/logout', {
+        axios.delete('/api/auth/logout', {
             withCredentials: true,
         })
         .then(() => {

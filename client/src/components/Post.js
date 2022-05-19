@@ -28,7 +28,7 @@ function Post (props){
     const handleCreateComment = (e) => {
         
         e.preventDefault();
-        axios.post(`http://localhost:4000/api/posts/${post._id}/comments/create`,
+        axios.post(`/api/posts/${post._id}/comments/create`,
             {
                 headers: {
                     "authorization": props.user.accessToken,
@@ -77,7 +77,7 @@ function Post (props){
     const handleDeletePost = (e) => {
         e.preventDefault();
 
-            axios.delete(`http://localhost:4000/api/posts/${post._id}`, 
+            axios.delete(`/api/posts/${post._id}`, 
             {
                 withCredentials: true,
             })
@@ -91,7 +91,7 @@ function Post (props){
     const handleDeleteComment = (e, id) => {
         e.preventDefault();
         
-        axios.delete(`http://localhost:4000/api/posts/${post._id}/comments/${id}/delete`,
+        axios.delete(`/api/posts/${post._id}/comments/${id}/delete`,
         {
             withCredentials: true,
         })
@@ -105,7 +105,7 @@ function Post (props){
 
     //Get all Comments (and update when a comment is updated/deleted)
     useEffect(() => {
-        axios.get(`http://localhost:4000/api/posts/${post._id}/comments/`,
+        axios.get(`/api/posts/${post._id}/comments/`,
         {
             withCredentials: true,
         })
@@ -117,7 +117,7 @@ function Post (props){
 
     //Get Post (and update when the post is updated)
     useEffect(() => {
-        axios.get(`http://localhost:4000/api/posts/${post._id}`,
+        axios.get(`/api/posts/${post._id}`,
         {
             withCredentials: true,
         })

@@ -41,7 +41,7 @@ function Dashboard (props) {
 
         //if the post is unpublished -> publish, else vice versa
         if(!post.published){
-            axios.post(`http://localhost:4000/api/posts/${post._id}/publish`, {
+            axios.post(`/api/posts/${post._id}/publish`, {
                 headers: {
                     "authorization": 'Bearer ' + props.user.accessToken
                 },
@@ -60,7 +60,7 @@ function Dashboard (props) {
         }
 
         else {
-            axios.post(`http://localhost:4000/api/posts/${post._id}/unpublish`,
+            axios.post(`/api/posts/${post._id}/unpublish`,
             {
                 headers: {
                     "authorization": props.user.accessToken

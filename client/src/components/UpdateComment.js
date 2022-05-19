@@ -22,7 +22,7 @@ function UpdateComment(props){
 
         e.preventDefault();
         //submit post data to server
-        axios.put(`http://localhost:4000/api/posts/${props.post._id}/comments/${props.comment._id}/edit`, {
+        axios.put(`/api/posts/${props.post._id}/comments/${props.comment._id}/edit`, {
             headers: {
                 "authorization": props.user.accessToken
             },
