@@ -1,3 +1,51 @@
+@media only screen and (max-width: 480px) {
+    .dashboard>#title {
+        font-size: 1.25rem !important;
+    }
+
+    #section-header {
+        font-size: 1rem !important;
+        padding: 1rem 0 1rem 0 !important;
+    }
+
+    #empty-message {
+        font-size: 0.75rem !important;
+    }
+}
+
+@media only screen and (min-width: 480px) and (max-width: 856px){
+    .dashboard>#title {
+        font-size: 2rem !important;
+    }
+
+    #section-header {
+        font-size: 1.5rem !important;
+        padding: 1.25rem 0 1.25rem 0 !important;
+    }
+
+    #empty-message {
+        font-size: 1rem !important;
+    }
+
+    .cards {
+        flex-direction: column !important;
+    }
+}
+
+@media only screen and (min-width: 856px) and (max-width: 1280px){
+    .dashboard>#title {
+        font-size: 3rem !important;
+    }
+
+    #section-header {
+        font-size: 2rem !important;
+    }
+
+    #empty-message {
+        font-size: 1.75rem !important;
+    }
+}
+
 .dashboard {
     display: flex;
     flex-direction: column;
@@ -7,17 +55,16 @@
 }
 
 .dashboard>#title {
-    font-size: 4rem;
     font-family: 'Poppins', sans-serif;
-    align-self: center;
     margin: 1rem;
+    font-size: 4rem;
+    text-align: center;
 }
 
 .dashboard>.posts {
     font-family: 'Poppins', sans-serif;
     font-size: 3rem;
     display: flex;
-    flex: 1;
     margin-left: 1rem;
     margin-right: 1rem;
     border-top: 1px solid grey;
@@ -31,13 +78,12 @@
 #empty-message{
     display: flex;
     justify-content: center;
-    flex: 1;
+    flex: 1 0 200px;
     background: url('../images/emptywork.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
     font-size: 2rem;
-    padding-top: 4rem;
 }
 
 .cards{
@@ -45,6 +91,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
+    justify-content: center;
+    margin-bottom: 30px;
 }
 
 .cards>.post-card {
@@ -58,7 +106,6 @@
     border: 1px solid rgb(255, 235, 235);
     gap: 1rem;
     border-radius: 8px;
-    flex: 1;
     color: #39485b;
     box-shadow: -1rem 1rem #babaee;
 }
@@ -69,6 +116,7 @@
 
 .posts>#section-header {
     padding: 2rem;
+    font-size: 3rem;
 }
 
 .cards{

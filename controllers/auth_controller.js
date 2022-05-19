@@ -194,13 +194,13 @@ exports.login = function(req, res) {
 exports.signup = [
 
     body("username").trim().isLength({min: 6}).withMessage("The Username Must Have Atleast 6 Characters").escape(),
-    body("password").trim().isStrongPassword().withMessage(`Please Have Atleast 8 Characters, 
+    body("password").trim().isStrongPassword().withMessage(`The Password Must Have Atleast 8 Characters, 
                                                             a Lowercase Letter, 
                                                             an Uppercase Letter, 
                                                             a Number, 
                                                             and a Symbol(@,!, etc...)`)
-        .escape(),
-    body("confirmpassword").trim().custom((value, {req}) => {
+                                                            .escape(),
+    body("confirmPassword").trim().custom((value, {req}) => {
         if(value !== req.body.password) {
             throw new Error('Passwords Do Not Match');
         }
@@ -209,6 +209,9 @@ exports.signup = [
 
     async (req, res) => {
 
+        // console.log(req.body.username)
+        // console.log(req.body.password)
+        // console.log(req.body.confirmPassword)
         const errors = validationResult(req);
 
         let userFound = await User.find({"username": req.body.username});

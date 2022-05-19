@@ -1,9 +1,15 @@
+@media only screen and (max-width: 480px) {
+    .post-comments {
+        font-size: 1.25rem !important;
+    }
+}
+
 .post-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     flex: 1;
-    padding: 0px 15%;
+    padding: 0px 5%;
     font-family: 'Courier New', Courier, monospace;
 }
 
@@ -26,6 +32,8 @@
     width: 100%;
     font-size: 2rem;
     padding-bottom: 1rem;
+    border-top: 1px solid lightgrey;
+    padding-top: 1rem;
 }
 
 .post-comments>*{
@@ -36,7 +44,6 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding-top: 1rem;
 }
 
 .comment-section>.comment-card {
@@ -169,7 +176,9 @@
 }
 
 .update-post-container {
-    padding: 5%;
+    z-index: 0;
+    width: 100%;
+    margin-bottom: 10px;
 }
 
 .update-post-form>.form-body>#post-title {
@@ -184,4 +193,3 @@
 .update-post-form>.form-body>*{
     padding-bottom: 1rem;
 }
-

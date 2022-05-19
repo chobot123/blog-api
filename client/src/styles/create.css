@@ -1,3 +1,13 @@
+@media only screen and (max-width: 480px) {
+    .create-post-form {
+        width: 90%;
+    }
+    .create-post-form>.form-body{
+        width: 100%;
+    }
+
+}
+
 .create-container {
     display: flex;
     justify-content: center;
