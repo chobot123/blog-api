@@ -1,5 +1,7 @@
 # Blog-Api
 
+:rainbow: A 'blogging' website created with an Express/Nodejs Backend and a Reactjs Frontend
+
 ## Table of Contents 
 
 - [Preview](##preview)
