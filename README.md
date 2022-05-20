@@ -23,7 +23,8 @@
 
 ## Setup
 
-- Go to the project directory and install Node.js via npm install including all required dependencies
+- Install [Node.js](https://github.com/nodejs/node)
+- Go to the project directory and install the required dependences: **npm install**
 - Run the server (api) in the root directory: **npm run devStart**
 - Go to the client subdirectory: **cd client**
 - Build the distribution files : **npm run build**
