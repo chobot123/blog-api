@@ -2,7 +2,7 @@
 
 ## Table of Contents 
 
-- [Preview - Preview](## Preview)
+- [Preview](##preview)
 - Technologies 
 - Setup
 - Features
