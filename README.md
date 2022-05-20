@@ -4,7 +4,7 @@
 
 - [Preview](##preview)
 - [Technologies](##technologies)
-- [Setup]
+- [Setup](##setup)
 - [Features]
 
 ## Preview
@@ -19,5 +19,15 @@
 - Node.js
 - Express
 - Mongoose (MongoDB)
+- Postman
+
+## Setup
+
+- Go to the project directory and install Node.js via npm install including all required dependencies
+- Run the server (api) in the root directory: **npm run devStart**
+- Go to the client subdirectory: **cd client**
+- Build the distribution files : **npm run build**
+- Run the client (React): **npm run start**
+- Open **http://localhost:3000** 
 
 
