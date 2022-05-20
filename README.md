@@ -36,7 +36,7 @@
 
 *Access the API and Mongo Schemas/Model: **./controllers ./models**
 
-*MERN stack, CRUD Application*
+*MERN stack, CRUD Application
 
 - Authentication via JSON Web Tokens (Refresh and Access Tokens)
 - Create, Edit, and Delete Posts
