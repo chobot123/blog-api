@@ -4,7 +4,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var session = require('express-session');
+var session = require('cookie-session');
 var passport = require('passport');
 var passportJWT = require('passport-jwt');
 var JWTStrategy = passportJWT.Strategy;
@@ -18,7 +18,6 @@ var cors = require('cors');
 
 //routers
 var postsRouter = require('./routes/posts');
-var usersRouter = require('./routes/users');
 var commentsRouter = require('./routes/comments');
 var authRouter = require('./routes/auths');
 
@@ -96,7 +95,6 @@ app.use(passport.session());
 
 //routers
 app.use('/api/posts', postsRouter);
-app.use('/api/users', usersRouter);
 app.use('/api/posts/:post_id/comments', commentsRouter);
 app.use('/api/auth', authRouter);
 
