@@ -23,7 +23,10 @@ var authRouter = require('./routes/auths');
 
 //CORS configuration
 var app = express();
-app.use(cors());
+app.use(cors({
+  credentials: true,
+},
+));
 
 //Mongoose Connection
 var mongoDB = process.env.MONGODB_URL;

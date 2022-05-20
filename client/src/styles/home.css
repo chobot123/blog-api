@@ -1,23 +1,76 @@
 @media only screen and (max-width: 380px ){
 
     .card>#title {
-        font-size: 2rem !important;
+        font-size: 1.25rem !important;
     }
 
     .card>#user {
         font-size: 0.75rem !important;
     }
-}
 
-@media only screen and (max-width: 600px){
     img {
         display: none;
     }
+
+    .card {
+        width: 90% !important;
+        padding: 5px !important;
+    }
+
+    .page-intro {
+        margin-bottom: 10px !important;
+    }
 }
 
-@media only screen and (max-width: 1000px) {
+@media only screen and (min-width: 380px) and (max-width: 680px){
+
+    .card>#title {
+        font-size: 1.5rem !important;
+    }
+
+    .card>#user {
+        font-size: 1rem !important;
+    }
+
+    img {
+        display: none; 
+    }
+
+    .card {
+        width: 90% !important;
+        padding: 5px !important;
+    }
+
+    .page-intro {
+        margin-bottom: 20px !important;
+    }
+}
+
+@media only screen and (min-width: 680px) and (max-width: 1280px) {
+
+    .card>#title {
+        font-size: 2rem !important;
+    }
+
+    .card>#user {
+        font-size: 1.25rem !important;
+    }
+
     .page-description {
         padding-bottom: 20px;
+    }
+    @media screen and (max-width: 900px) {
+        img {
+            width: 50% !important;
+        }
+    }
+    img {
+        width: 40%;
+    }
+
+    .card {
+        width: 80% !important;
+        padding: 20px !important;
     }
   }
 
@@ -45,11 +98,11 @@
     border-bottom: 1px solid rgb(225, 225, 225);
     font-family: 'Quicksand', sans-serif;
     font-weight: bolder;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 .page-description>img {
-    width: 50%;
+    width: 35%;
 }
 
 .posts {
@@ -70,7 +123,7 @@
     border: 1px solid rgba(255, 235, 235);
     margin: 2rem;
     min-height: 20rem;
-    min-width: 40%;
+    width: 40%;
     padding: 1rem;
     /*--animation--*/
     transform: translatey(0px);
@@ -173,11 +226,11 @@
     display: flex;
     align-items: center;
     flex: 1;
-    font-size: 3rem;
+    font-size: 2.5rem;
 }
 
 .card>#user{
-    font-size: 1.25rem;
+    font-size: 1.75rem;
 }
 
 .card>#published-date{

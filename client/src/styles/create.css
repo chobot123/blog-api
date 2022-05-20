@@ -1,11 +1,29 @@
 @media only screen and (max-width: 480px) {
     .create-post-form {
-        width: 90%;
+        width: 90% !important;
     }
     .create-post-form>.form-body{
-        width: 100%;
+        width: 100% !important;
     }
 
+}
+
+@media only screen and (min-width: 480px) and (max-width: 856px){
+    .create-post-form {
+        width: 90% !important;
+    }
+    .create-post-form>.form-body{
+        width: 90% !important;
+    }
+}
+
+@media only screen and (min-width: 856px) and (max-width: 1280px){
+    .create-post-form {
+        width: 75% !important;
+    }
+    .create-post-form>.form-body{
+        width: 75% !important;
+    }
 }
 
 .create-container {
@@ -20,6 +38,11 @@
     margin-top: 2rem;
     padding: 1rem;
     box-shadow: 0 .5rem 1rem rgba(0,0,0,.2) !important;
+    width: 65%;
+}
+
+.create-post-form>.form-body {
+    width: 65%;
 }
 
 .create-post-form>.form-body>*{
