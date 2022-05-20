@@ -2,7 +2,7 @@
 
 ## Table of Contents 
 
-- Demo (Heroku)
+- Preview
 - Technologies 
 - Setup
 - Features
