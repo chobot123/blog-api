@@ -6,3 +6,8 @@
 - Technologies 
 - Setup
 - Features
+
+## Preview
+
+[Demo](https://polar-hamlet-58263.herokuapp.com/)
+
