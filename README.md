@@ -5,7 +5,8 @@
 - [Preview](##preview)
 - [Technologies](##technologies)
 - [Setup](##setup)
-- [Features]
+- [Features](##features)
+- [Contact](##contact)
 
 ## Preview
 
@@ -15,11 +16,11 @@
 
 - HTML5
 - CSS3
-- React.js
-- Node.js
-- Express
-- Mongoose (MongoDB)
-- Postman
+- [React.js](https://github.com/facebook/react)
+- [Node.js](https://github.com/nodejs/node)
+- [Express](https://expressjs.com/en/starter/installing.html)
+- [Mongoose (MongoDB)](https://github.com/Automattic/mongoose)
+- [Postman](https://learning.postman.com/docs/getting-started/introduction/)
 
 ## Setup
 
@@ -31,4 +32,17 @@
 - Run the client (React): **npm run start**
 - Open **http://localhost:3000** 
 
+## Features
 
+*Access the API and Mongo Schemas/Model: **./controllers ./models**
+*MERN stack, CRUD Application*
+
+- Authentication via JSON Web Tokens (Refresh and Access Tokens)
+- Create, Edit, and Delete Posts
+- Create, Edit, and Delete Comments
+- Publish/Unpublish Posts in a Dashboard
+- Responsive UI
+
+## Contact
+
+If you have any questions email <chojoshua99@gmail.com>
