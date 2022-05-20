@@ -24,6 +24,7 @@ var authRouter = require('./routes/auths');
 //CORS configuration
 var app = express();
 app.use(cors({
+  origin: "*",
   credentials: true,
 },
 ));
@@ -41,7 +42,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, './client/build')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 //set up localstrategy
 passport.use(
