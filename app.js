@@ -23,11 +23,7 @@ var authRouter = require('./routes/auths');
 
 //CORS configuration
 var app = express();
-app.use(cors({
-  origin: "*",
-  credentials: true,
-},
-));
+app.use(cors());
 
 //Mongoose Connection
 var mongoDB = process.env.MONGODB_URL;
@@ -43,6 +39,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.resolve(__dirname, "./client/build")));
 
 //set up localstrategy
 passport.use(
@@ -99,9 +96,9 @@ app.use('/api/posts', postsRouter);
 app.use('/api/posts/:post_id/comments', commentsRouter);
 app.use('/api/auth', authRouter);
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './client/build/index.html'))
-})
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
