@@ -13,11 +13,11 @@
 
 ## Technologies
 
--HTML5
--CSS3
--React.js
--Node.js
--Express
--Mongoose (MongoDB)
+- HTML5
+- CSS3
+- React.js
+- Node.js
+- Express
+- Mongoose (MongoDB)
 
 
