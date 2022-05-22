@@ -49,5 +49,5 @@
 ## Contact
 
 If you have any questions email <chojoshua99@gmail.com>
- **If the CSS doesn't seem to load, please try reloading the page
+**If the CSS doesn't seem to load, please try reloading the page
   and if the problem persists please email me! (Not sure if its a deployment issure or not)**
