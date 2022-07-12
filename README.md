@@ -1,7 +1,7 @@
 # Blog-Api
 
 :rainbow: A 'blogging' website created with an Express/Nodejs Backend and a Reactjs Frontend
-## ALERT: (UPDATING FROM EXPIRED TINYMCE SUBSCRIPTIONS)
+## ALERT: (UPDATING EXPIRED TINYMCE SUBSCRIPTIONS)
 
 ## Table of Contents 
 
